@@ -1,8 +1,8 @@
 import kivy
 kivy.require('1.1.3')
 
-from kivy.properties import NumericProperty
 from kivy.app import App
+from kivy.properties import NumericProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.anchorlayout import AnchorLayout
@@ -19,12 +19,11 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 
 import random
-from train_ccs import train_ccs
+from train_css import train_ccs
 from kivy.uix.textinput import TextInput
 from kivy.uix.dropdown import DropDown
-from kivy.uix.accordion import Accordion, AccordionItem
 import re
-
+ 
 class ComboEdit(TextInput):
     '''
     This class defines a Editable Combo-Box in the traditional sense
@@ -65,42 +64,6 @@ class ComboEdit(TextInput):
         print 'list_station', self.list_station
         print 'VALUE', value
 
-class Showcase(Screen):
-    pass
-
-class StandardWidgets2(Screen):
-    value = NumericProperty(0)
-    ce = ComboEdit()
-    
-    def get_route(self):
-        print 'ENTREEEEEEEEEEEEE'
-        print 'LIST', self.ce.list_station
-        
-
-        #~ s2 = StandardWidgets()
-        #~ station_a=s2.station_a
-        #~ aa=s2.station_a
-        #~ station_b=s2.station_b
-#~ 
-        #~ d=train_caracas()
-        #~ station_a = d.find_station(station_a)
-        #~ station_b = d.find_station(station_b)
-        #~ 
-        #~ print 'station_aaa', station_a
-        #~ print 'station_bbbb',station_b
-#~ 
-        #~ if station_a[1]==station_b[1]:
-            #~ a= d.get_route(station_a,station_b)
-            #~ print a 
-        #~ else:
-            #~ dict_lines, dict_sort = d.get_dict_option(station_a,station_b)
-            #~ dict_station_line = d.get_station_line(dict_lines,dict_sort)
-            #~ a= d.get_route_options(dict_station_line)
-            #~ print a
-        a= 'Hola Gaviotinaaaa'
-        print 'a',a
-        return 'NON ENTIENDO'
-    
 
 class StandardWidgets(Screen):
     
@@ -179,14 +142,12 @@ class StandardWidgets(Screen):
             instance.options = list(set(match))
         instance.drop_down.open(instance)
 
-sm = ScreenManager()
-sm.add_widget(StandardWidgets(name='menu'))
-sm.add_widget(StandardWidgets2(name='settings'))
 
-class Trainccs(App):
+ 
+class TraincssApp(App):
 
     def build(self):
-        return sm
+        pass
 
 if __name__ == '__main__':
-    Trainccs().run()
+    TraincssApp().run()
