@@ -19,7 +19,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 
 import random
-from train_css import train_ccs
+from train_ccs import train_ccs
 from kivy.uix.textinput import TextInput
 from kivy.uix.dropdown import DropDown
 import re
@@ -144,10 +144,10 @@ class StandardWidgets(Screen):
 
 
  
-class TraincssApp(App):
+class TrainccsApp(App):
 
     def build(self):
         pass
 
 if __name__ == '__main__':
-    TraincssApp().run()
+    TrainccsApp().run()

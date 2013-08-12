@@ -1,7 +1,10 @@
+StandardWidgets:
+
 <StandardWidgets>:
     station_a: _station_a
     station_b: _station_b
     route: _route
+    
     ComboEdit:
         size_hint_y: .3, .3
         size_hint_x: .11, .11
@@ -28,13 +31,7 @@
         width: 200
         pos_hint: {'center':(.5, .7)}
         on_press: root.get_route(*args)
-        #~ on_release: root.manager.current = root.manager.next()
 
     Label:
         id: _route
 
-<StandardWidgets2>:
-
-    BoxLayout:
-        orientation: 'vertical'
-        padding: 50
