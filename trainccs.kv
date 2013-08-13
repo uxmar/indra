@@ -5,31 +5,34 @@ StandardWidgets:
     station_b: _station_b
     route: _route
 
-    height: "200dp"
-    size_hint_y: None
-
-    GridLayout:
-        cols: 2
-        row_default_height: "40dp"
-        row_force_default: True
-        spacing: "10dp"
-        padding: "10dp"
-
-        Label:
-            text: 'Origen'
-        ComboEdit:
-            id: _station_a
-            on_text: root.on_text(self, args[1])
-        Label:
-            text: 'Destino'
-        ComboEdit:
-            id: _station_b
-            on_text: root.on_text(self, args[1])
+    ComboEdit:
+        size_hint_y: .3, .3
+        size_hint_x: .11, .11
+        pos_hint: {'center':(.5, .9)}
+        height: 40
+        width: 270
+        id: _station_a
+        on_text: root.on_text(self, args[1])
+    ComboEdit:
+        size_hint_y: .3, .3
+        size_hint_x: .11, .11
+        pos_hint: {'center':(.5, .8)}
+        height: 40
+        width: 270
+        id: _station_b
+        on_text: root.on_text(self, args[1])
 
     Button:
         size_hint_y: None
         height: "40dp"
         text: 'Obtener Ruta'
-
+        size_hint_y: .3, .3
+        size_hint_x: .11, .11
+        height: 40
+        width: 200
+        pos_hint: {'center':(.5, .7)}
+        on_press: root.get_route(*args)
+    
     Label:
         id: _route
+

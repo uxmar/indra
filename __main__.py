@@ -98,14 +98,6 @@ class StandardWidgets(Screen):
                 
                 print direction
             return direction
-                
-                #~ print 'DIRECTION', direction
-                #~ print 'STATIONS',stations
-                
-                
-            #~ for list_dict in dict_route[option]:
-                #~ print 'LISTA DE DICCIONARIOS',list_dict
-
 
     def get_route(self,instance):
         print 'ENTREEEEEEEEEEEEE'
@@ -130,8 +122,6 @@ class StandardWidgets(Screen):
         
         self.route.text = self.get_string_route(a)
             
-        #~ self.route.text =''.join('{}{}'.format(key, val) for key, val in a.items())
-
     def on_text(self, instance, value):
         if value == '':
             instance.options=[]
