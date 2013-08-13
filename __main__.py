@@ -110,7 +110,7 @@ class StandardWidgets(Screen):
     def get_route(self,instance):
         print 'ENTREEEEEEEEEEEEE'
         
-        d=train_caracas()
+        d=train_ccs()
         station_a = d.find_station(self.station_a.text)
         station_b = d.find_station(self.station_b.text)
         
