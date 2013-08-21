@@ -1,6 +1,7 @@
 import kivy
 kivy.require('1.1.3')
 
+from kivy.uix.listview import ListView
 from kivy.app import App
 from kivy.properties import NumericProperty
 from kivy.uix.boxlayout import BoxLayout
@@ -14,16 +15,36 @@ from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.properties import StringProperty, ListProperty
 from kivy.clock import Clock
-
+from kivy.uix.label import Label
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
-
+from kivy.uix.modalview import ModalView
 import random
 from train_ccs import train_ccs
 from kivy.uix.textinput import TextInput
 from kivy.uix.dropdown import DropDown
 import re
- 
+
+#~ list_route=[]
+
+
+#~ class BuddyList(BoxLayout):
+    #~ list_view = list_route
+    
+    #~ def __init__(self, list_route):
+        
+        #~ super(BuddyList, self).__init__()
+        #~ self.app = Orkiv.get_running_app()
+        #~ self.list_view.adapter.data = sorted(self.app.xmpp.client_roster.keys())
+
+#~ class TrainRoot(ModalView):
+    #~ 
+    #~ def __init__(self):
+        #~ super (TrainRoot,self).__init__()
+        #~ self.buddy_list = BuddyList()
+        #~ self.add_widget(self.buddy_list)
+        
+
 class ComboEdit(TextInput):
     '''
     This class defines a Editable Combo-Box in the traditional sense
@@ -67,6 +88,10 @@ class ComboEdit(TextInput):
 
 class StandardWidgets(Screen):
     
+    #~ def __init__(self):
+        #~ list_route = []
+    
+    
     rtsstr = StringProperty("".join(("Maternidad,,,Sabana Grande,,,Maternidad,,,",
                         "Substrate1,,,La Hoyada,,,La Bandera",
                         ",,,Agua Salud,,,Altamira,,,substrate_",
@@ -74,34 +99,27 @@ class StandardWidgets(Screen):
 
     def get_string_route(self, dict_route):
         
+        list_route =[]
+        
         for option in dict_route:
-            print 'OPTION', option +1
+            list_route.append('OPTION  ' + str(option +1))
             
-            #~ print 'ANTESSS', dict_route[option]
-            
-            print ''
             for direction_route in dict_route[option]:
-                #~ print 'DESPUES',direction_route
-                #~ print 'DIRECTION',direction_route['Direction']
                 direction = 'Tomar tren con direccion ' + direction_route['Direction'] + '\n' + 'Recorrer las Estaciones:'
-                #~ print direction
-                #~ print 'ROUTE', direction_route['Route']
-                
-                stations = ','.join(direction_route['Route'])
-                
-                #~ for i in direction_route['Route']:
-                    #~ direction = + '',i
-                
-                direction = direction + '\n' + stations
-                
-                
+                list_route.append('Tomar tren con direccion ' + direction_route['Direction'])
+                list_route.append('Recorrer las Estaciones:')
+                list_route.append(', '.join(direction_route['Route']))
                 
                 print direction
-            return direction
+                print '-------'
+        print 'LIST ROUTE', list_route
+        return list_route
 
     def get_route(self,instance):
-        print 'ENTREEEEEEEEEEEEE'
         
+        #~ self.clear_widgets()
+        #~ self.final = Label(text="Hello World")
+        #~ self.add_widget(self.final)
         d=train_ccs()
         station_a = d.find_station(self.station_a.text)
         station_b = d.find_station(self.station_b.text)
@@ -119,9 +137,24 @@ class StandardWidgets(Screen):
             a= d.get_route_options(dict_station_line)
             #~ self.get_string_route(a)
             print a
-        
-        self.route.text = self.get_string_route(a)
-            
+
+        self.get_string_route(a)
+            #~ self.clear_widgets()
+            #~ self.buddy_list = BuddyList(self.get_string_route(a))
+            #~ self.add_widget(self.buddy_list)
+
+
+
+
+        #~ self.clear_widgets()
+        #~ list_view = ListView(item_strings=[str(index) for index in self.get_string_route(a)])
+        #~ self.add_widget(list_view)
+
+
+        #~ modal = TrainRoot()
+        #~ modal.open()
+
+
     def on_text(self, instance, value):
         if value == '':
             instance.options=[]
@@ -136,8 +169,7 @@ class StandardWidgets(Screen):
  
 class TrainccsApp(App):
 
-    def build(self):
-        pass
+    def __init__(self):
+        super(TrainccsApp, self).__init__()
 
-if __name__ == '__main__':
-    TrainccsApp().run()
+TrainccsApp().run()
