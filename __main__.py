@@ -1,9 +1,10 @@
 import kivy
 kivy.require('1.1.3')
 
-from kivy.uix.listview import ListView
 from kivy.app import App
+from kivy.uix.accordion import Accordion, AccordionItem
 from kivy.properties import NumericProperty
+from kivy.properties import OptionProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.anchorlayout import AnchorLayout
@@ -23,27 +24,10 @@ import random
 from train_ccs import train_ccs
 from kivy.uix.textinput import TextInput
 from kivy.uix.dropdown import DropDown
+from kivy.adapters.listadapter import ListAdapter
+from kivy.uix.listview import ListItemButton, ListView
 import re
-
-#~ list_route=[]
-
-
-#~ class BuddyList(BoxLayout):
-    #~ list_view = list_route
-    
-    #~ def __init__(self, list_route):
-        
-        #~ super(BuddyList, self).__init__()
-        #~ self.app = Orkiv.get_running_app()
-        #~ self.list_view.adapter.data = sorted(self.app.xmpp.client_roster.keys())
-
-#~ class TrainRoot(ModalView):
-    #~ 
-    #~ def __init__(self):
-        #~ super (TrainRoot,self).__init__()
-        #~ self.buddy_list = BuddyList()
-        #~ self.add_widget(self.buddy_list)
-        
+from kivy.uix.gridlayout import GridLayout
 
 class ComboEdit(TextInput):
     '''
@@ -88,10 +72,6 @@ class ComboEdit(TextInput):
 
 class StandardWidgets(Screen):
     
-    #~ def __init__(self):
-        #~ list_route = []
-    
-    
     rtsstr = StringProperty("".join(("Maternidad,,,Sabana Grande,,,Maternidad,,,",
                         "Substrate1,,,La Hoyada,,,La Bandera",
                         ",,,Agua Salud,,,Altamira,,,substrate_",
@@ -100,26 +80,33 @@ class StandardWidgets(Screen):
     def get_string_route(self, dict_route):
         
         list_route =[]
+        list_option=[]
+        list_list_route = []
         
         for option in dict_route:
-            list_route.append('OPTION  ' + str(option +1))
-            
             for direction_route in dict_route[option]:
-                direction = 'Tomar tren con direccion ' + direction_route['Direction'] + '\n' + 'Recorrer las Estaciones:'
-                list_route.append('Tomar tren con direccion ' + direction_route['Direction'])
-                list_route.append('Recorrer las Estaciones:')
-                list_route.append(', '.join(direction_route['Route']))
+                list_route.append('Linea: ')
+                list_route.append('Direccion: ' + direction_route['Direction'])
+                list_route.append('Estaciones:')
                 
-                print direction
-                print '-------'
-        print 'LIST ROUTE', list_route
-        return list_route
+                for station in direction_route['Route']:
+                    list_route.append(station)
+                
+                #~ list_route.append(', '.join(direction_route['Route']))
+                
+                print 'LIST ROUTE', list_route
+                
+            if list_route:
+                print 'ENTRE'
+                list_list_route.append(list_route)
+            print 'list_list_route', list_list_route
+                
+            list_route =[]
+
+        return list_list_route
 
     def get_route(self,instance):
         
-        #~ self.clear_widgets()
-        #~ self.final = Label(text="Hello World")
-        #~ self.add_widget(self.final)
         d=train_ccs()
         station_a = d.find_station(self.station_a.text)
         station_b = d.find_station(self.station_b.text)
@@ -129,31 +116,50 @@ class StandardWidgets(Screen):
 
         if station_a[1]==station_b[1]:
             a= d.get_route(station_a,station_b)
-            #~ self.get_string_route(a)
             print a 
         else:
             dict_lines, dict_sort = d.get_dict_option(station_a,station_b)
             dict_station_line = d.get_station_line(dict_lines,dict_sort)
             a= d.get_route_options(dict_station_line)
-            #~ self.get_string_route(a)
             print a
 
-        self.get_string_route(a)
-            #~ self.clear_widgets()
-            #~ self.buddy_list = BuddyList(self.get_string_route(a))
-            #~ self.add_widget(self.buddy_list)
+
+        self.clear_widgets()
+        root = Accordion(orientation='vertical',anchor_x='left')
+        i=1
+        for x in self.get_string_route(a):
+            
+            
+            
+            item = AccordionItem(title='OPCION ' + str(i))
+            
+            gl = GridLayout(cols=1)
+            #~ list_view = ListView(item_strings=[str(index) for index in x],anchor_y='left')
+            #~ 
+            #~ tab.add_widget(list_view)
+
+            for m in x:
+                p= Label(text=m,halign='left',text_size=(200, None))
+                #~ p = Label(text='[color=ff3333]Hello[/color][color=3333ff]World[/color]', markup = True)
+                gl.add_widget(p)
+
+            item.add_widget(gl)
+            root.add_widget(item)
+
+            #~ simple_list_adapter = ListAdapter(
+                    #~ data=["Item #{0}".format(j) for j in x],
+                    #~ cls=Label)
+
+            #~ list_view = ListView(adapter=simple_list_adapter,halign='left')
+            #~ tab.add_widget(list_view)
 
 
-
-
-        #~ self.clear_widgets()
-        #~ list_view = ListView(item_strings=[str(index) for index in self.get_string_route(a)])
-        #~ self.add_widget(list_view)
-
-
-        #~ modal = TrainRoot()
-        #~ modal.open()
-
+            #~ item.add_widget(tab)
+            #~ root.add_widget(item)
+            i=i+1
+        self.add_widget(root)
+        
+        
 
     def on_text(self, instance, value):
         if value == '':
