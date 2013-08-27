@@ -8,7 +8,6 @@ from kivy.properties import OptionProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.anchorlayout import AnchorLayout
-from kivy.uix.button import Button
 from kivy.uix.widget import Widget
 from kivy.uix.scatter import Scatter
 from kivy.uix.treeview import TreeView, TreeViewLabel
@@ -27,6 +26,7 @@ from kivy.uix.dropdown import DropDown
 from kivy.adapters.listadapter import ListAdapter
 from kivy.uix.listview import ListItemButton, ListView
 import re
+from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 
 class ComboEdit(TextInput):
@@ -70,8 +70,43 @@ class ComboEdit(TextInput):
         print 'VALUE', value
 
 
+class RouteResult(ModalView):
+
+    def __init__(self,list_route):
+        super(RouteResult, self).__init__(auto_dismiss=False)
+        self.clear_widgets()
+        #~ self.on_open = self.show_view_result
+
+
+    #~ def show_view_result(self):
+
+        root = Accordion(orientation='vertical',anchor_x='left')
+        i=1
+        for x in list_route:
+            item = AccordionItem(title='OPCION ' + str(i))
+            boxl = BoxLayout(orientation= 'vertical',height= "500dp",size_hint_y= None)
+            gl = GridLayout(cols=1,row_default_height= "20dp",row_force_default=True)
+
+            for m in x:
+                p= Label(text=m,halign='left',text_size=(500, None))
+                #~ p = Label(text='[color=ff3333]Hello[/color][color=3333ff]World[/color]', markup = True)
+                gl.add_widget(p)
+
+            boxl.add_widget(gl)
+            item.add_widget(boxl)
+            root.add_widget(item)
+            i=i+1
+
+        button = Button(text="Try Again",auto_dismiss=False)
+        button.size_hint = (2.0, None)
+        button.height = "60dp"
+        button.bind(on_press=self.dismiss)
+        item.add_widget(button)
+        self.add_widget(root)
+
+
 class StandardWidgets(Screen):
-    
+
     rtsstr = StringProperty("".join(("Maternidad,,,Sabana Grande,,,Maternidad,,,",
                         "Substrate1,,,La Hoyada,,,La Bandera",
                         ",,,Agua Salud,,,Altamira,,,substrate_",
@@ -105,7 +140,7 @@ class StandardWidgets(Screen):
 
         return list_list_route
 
-    def get_route(self,instance):
+    def get_route(self, instance):
         
         d=train_ccs()
         station_a = d.find_station(self.station_a.text)
@@ -123,43 +158,10 @@ class StandardWidgets(Screen):
             a= d.get_route_options(dict_station_line)
             print a
 
-
-        self.clear_widgets()
-        root = Accordion(orientation='vertical',anchor_x='left')
-        i=1
-        for x in self.get_string_route(a):
-            
-            
-            
-            item = AccordionItem(title='OPCION ' + str(i))
-            
-            gl = GridLayout(cols=1)
-            #~ list_view = ListView(item_strings=[str(index) for index in x],anchor_y='left')
-            #~ 
-            #~ tab.add_widget(list_view)
-
-            for m in x:
-                p= Label(text=m,halign='left',text_size=(200, None))
-                #~ p = Label(text='[color=ff3333]Hello[/color][color=3333ff]World[/color]', markup = True)
-                gl.add_widget(p)
-
-            item.add_widget(gl)
-            root.add_widget(item)
-
-            #~ simple_list_adapter = ListAdapter(
-                    #~ data=["Item #{0}".format(j) for j in x],
-                    #~ cls=Label)
-
-            #~ list_view = ListView(adapter=simple_list_adapter,halign='left')
-            #~ tab.add_widget(list_view)
-
-
-            #~ item.add_widget(tab)
-            #~ root.add_widget(item)
-            i=i+1
-        self.add_widget(root)
         
-        
+
+        route = RouteResult(self.get_string_route(a))
+        route.open()
 
     def on_text(self, instance, value):
         if value == '':
