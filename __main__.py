@@ -75,16 +75,16 @@ class RouteResult(ModalView):
     def __init__(self,list_route):
         super(RouteResult, self).__init__(auto_dismiss=False)
         self.clear_widgets()
-        #~ self.on_open = self.show_view_result
+        self.list_route = list_route
+        self.on_open = self.show_view_result
 
+    def show_view_result(self):
 
-    #~ def show_view_result(self):
-
-        root = Accordion(orientation='vertical',anchor_x='left')
+        root = Accordion(orientation='vertical',anchor_x='center')
         i=1
-        for x in list_route:
+        for x in self.list_route:
             item = AccordionItem(title='OPCION ' + str(i))
-            boxl = BoxLayout(orientation= 'vertical',height= "500dp",size_hint_y= None)
+            boxl = BoxLayout(orientation= 'vertical',height= "500dp",size_hint_y= None,)
             gl = GridLayout(cols=1,row_default_height= "20dp",row_force_default=True)
 
             for m in x:
@@ -95,13 +95,10 @@ class RouteResult(ModalView):
             boxl.add_widget(gl)
             item.add_widget(boxl)
             root.add_widget(item)
+            button = Button(text="Go Back", auto_dismiss=False, size_hint=(0.2, 0.1), pos_hint= {'center_x':.5, 'center_y':.7})
+            button.bind(on_press=self.dismiss)
+            boxl.add_widget(button)
             i=i+1
-
-        button = Button(text="Try Again",auto_dismiss=False)
-        button.size_hint = (2.0, None)
-        button.height = "60dp"
-        button.bind(on_press=self.dismiss)
-        item.add_widget(button)
         self.add_widget(root)
 
 
