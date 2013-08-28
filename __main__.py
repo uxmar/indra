@@ -2,6 +2,7 @@ import kivy
 kivy.require('1.1.3')
 
 from kivy.app import App
+from kivy.uix.scrollview import ScrollView
 from kivy.uix.accordion import Accordion, AccordionItem
 from kivy.properties import NumericProperty
 from kivy.properties import OptionProperty
@@ -28,6 +29,7 @@ from kivy.uix.listview import ListItemButton, ListView
 import re
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
+from kivy.graphics import Color, Rectangle
 
 class ComboEdit(TextInput):
     '''
@@ -66,9 +68,29 @@ class ComboEdit(TextInput):
         # update text of selection to the edit box
         self.text = value
         self.list_station.append(value)
-        print 'list_station', self.list_station
-        print 'VALUE', value
 
+
+class ColorLayout(FloatLayout):
+    pass
+
+class ColorLayoutPy(FloatLayout):
+
+    def __init__(self, **kwargs):
+        super(ColorLayoutPy, self).__init__(**kwargs)
+
+        with self.canvas.before:
+            Color(255, 255, 255, 255)
+            self.rect = Rectangle(
+                            size=self.size,
+                            pos=self.pos)
+
+        self.bind(
+                    size=self._update_rect,
+                    pos=self._update_rect)
+
+    def _update_rect(self, instance, value):
+        self.rect.pos = instance.pos
+        self.rect.size = instance.size
 
 class RouteResult(ModalView):
 
@@ -78,24 +100,34 @@ class RouteResult(ModalView):
         self.list_route = list_route
         self.on_open = self.show_view_result
 
+
     def show_view_result(self):
 
         root = Accordion(orientation='vertical',anchor_x='center')
         i=1
         for x in self.list_route:
             item = AccordionItem(title='OPCION ' + str(i))
-            boxl = BoxLayout(orientation= 'vertical',height= "500dp",size_hint_y= None,)
-            gl = GridLayout(cols=1,row_default_height= "20dp",row_force_default=True)
+            color = ColorLayoutPy()
+            
+            boxl = BoxLayout(orientation= 'vertical',height= "500dp")
+            gl = GridLayout(cols=1, spacing=10, size_hint_y=None,row_default_height= "15dp",row_force_default=True)
+            gl.bind(minimum_height=gl.setter('height'))
+
+            scroll = ScrollView(size_hint=(None, None), size=(500, 500),
+            pos_hint={'center_x':.5, 'center_y':.5})
 
             for m in x:
-                p= Label(text=m,halign='left',text_size=(500, None))
-                #~ p = Label(text='[color=ff3333]Hello[/color][color=3333ff]World[/color]', markup = True)
+                p= Label(text='[color=000000]' + m + '[/color]',halign='left',text_size=(300, None),markup=True)
                 gl.add_widget(p)
 
-            boxl.add_widget(gl)
-            item.add_widget(boxl)
+            scroll.add_widget(gl)
+            boxl.add_widget(scroll)
+            color.add_widget(boxl)
+            item.add_widget(color)
             root.add_widget(item)
-            button = Button(text="Go Back", auto_dismiss=False, size_hint=(0.2, 0.1), pos_hint= {'center_x':.5, 'center_y':.7})
+            button = Button(text="Go Back", auto_dismiss=False, size_hint=(None, None), pos_hint= {'center_x':.5, 'center_y':.7})
+            button.height="45dp"
+            button.width="220dp"
             button.bind(on_press=self.dismiss)
             boxl.add_widget(button)
             i=i+1
@@ -105,34 +137,32 @@ class RouteResult(ModalView):
 class StandardWidgets(Screen):
 
     rtsstr = StringProperty("".join(("Maternidad,,,Sabana Grande,,,Maternidad,,,",
-                        "Substrate1,,,La Hoyada,,,La Bandera",
+                        "Zoologico,,,La Hoyada,,,La Bandera",
                         ",,,Agua Salud,,,Altamira,,,substrate_",
                         "silicon,,,")))
 
     def get_string_route(self, dict_route):
         
         list_route =[]
-        list_option=[]
         list_list_route = []
         
         for option in dict_route:
             for direction_route in dict_route[option]:
-                list_route.append('Linea: ')
+
+                if direction_route['Line'] in ['line_20','line21']:
+                    line= '2'
+                else:
+                    line = direction_route['Line'].split('_')[1]
+
+                list_route.append('Linea: ' + line)
                 list_route.append('Direccion: ' + direction_route['Direction'])
                 list_route.append('Estaciones:')
                 
                 for station in direction_route['Route']:
                     list_route.append(station)
                 
-                #~ list_route.append(', '.join(direction_route['Route']))
-                
-                print 'LIST ROUTE', list_route
-                
             if list_route:
-                print 'ENTRE'
                 list_list_route.append(list_route)
-            print 'list_list_route', list_list_route
-                
             list_route =[]
 
         return list_list_route
@@ -143,9 +173,6 @@ class StandardWidgets(Screen):
         station_a = d.find_station(self.station_a.text)
         station_b = d.find_station(self.station_b.text)
         
-        print 'station_aaa', station_a
-        print 'station_bbbb',station_b
-
         if station_a[1]==station_b[1]:
             a= d.get_route(station_a,station_b)
             print a 
@@ -154,8 +181,6 @@ class StandardWidgets(Screen):
             dict_station_line = d.get_station_line(dict_lines,dict_sort)
             a= d.get_route_options(dict_station_line)
             print a
-
-        
 
         route = RouteResult(self.get_string_route(a))
         route.open()
@@ -171,7 +196,7 @@ class StandardWidgets(Screen):
         instance.drop_down.open(instance)
 
 
- 
+
 class TrainccsApp(App):
 
     def __init__(self):

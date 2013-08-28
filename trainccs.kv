@@ -1,49 +1,41 @@
 StandardWidgets:
 
+<ColorLayout>:
+    canvas.before:
+        Color:
+            rgba: 255, 255, 255, 255
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
 <StandardWidgets>:
     station_a: _station_a
     station_b: _station_b
-    route: _route
 
-    ComboEdit:
-        size_hint_y: .3, .3
-        size_hint_x: .11, .11
-        pos_hint: {'center':(.5, .9)}
-        height: 40
-        width: 270
-        id: _station_a
-        on_text: root.on_text(self, args[1])
-    ComboEdit:
-        size_hint_y: .3, .3
-        size_hint_x: .11, .11
-        pos_hint: {'center':(.5, .8)}
-        height: 40
-        width: 270
-        id: _station_b
-        on_text: root.on_text(self, args[1])
+    ColorLayout:
 
-    Button:
-        size_hint_y: None
-        height: "40dp"
-        text: 'Obtener Ruta'
-        size_hint_y: .3, .3
-        size_hint_x: .11, .11
-        height: 40
-        width: 200
-        pos_hint: {'center':(.5, .7)}
-        on_press: root.get_route(*args)
-    
-    Label:
-        id: _route
+        ComboEdit:
+            size_hint_y: "0.3dp", "0.3dp"
+            size_hint_x: "0.11dp", "0.11dp"
+            pos_hint: {'center':(.5, .7)}
+            height: "40dp"
+            width: "270dp"
+            id: _station_a
+            on_text: root.on_text(self, args[1])
+        ComboEdit:
+            size_hint_y: "0.3dp", "0.3dp"
+            size_hint_x: "0.11dp", "0.11dp"
+            pos_hint: {'center':(.5, .6)}
+            height: "40dp"
+            width: "270dp"
+            id: _station_b
+            on_text: root.on_text(self, args[1])
+        Button:
+            text: 'Obtener Ruta'
+            size_hint_y: "0.3dp", "0.3dp"
+            size_hint_x: "0.11dp", "0.11dp"
+            height: "40dp"
+            width: "200dp"
+            pos_hint: {'center':(.5, .5)}
+            on_press: root.get_route(*args)
 
-<BuddyListItem>:
-    size_hint_x: None
-    height: "40dp"
-    Label:
-        text: root.option
-    Label:
-        text: root.number_line
- 
-#<BuddyList>:
-    #ListView:
-        #item_strings: [str(index) for index in root.list_view]

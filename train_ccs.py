@@ -40,7 +40,7 @@ class train_ccs(object):
         list_num=[]
         list_routed_sorted=[]
         i=0
-        dict_routed={'Direction':'','Route':None}
+        dict_routed={'Direction':'','Route':None,'Line':''}
         if from_1[0] < up_1[0]:
             [list_num.append(i) for i in range(from_1[0],up_1[0]+1)]
             for index in sorted(list_num):
@@ -50,6 +50,9 @@ class train_ccs(object):
             dict_routed.update({'Route':list_routed_sorted})
             
             dict_routed.update({'Direction':self.line_station[from_1[1]]['direction'][0]})
+            
+            
+            dict_routed.update({'Line':from_1[1]})
             
             #~ print 'DIRECCION', self.get_direction(from_1[1],'down')
             
@@ -63,6 +66,8 @@ class train_ccs(object):
                     i=i+1
             dict_routed.update({'Route':list_routed_sorted})
             dict_routed.update({'Direction':self.line_station[from_1[1]]['direction'][1]})
+            dict_routed.update({'Line':from_1[1]})
+            
             #~ print 'DIRECCION', self.get_direction(from_1[1],'up')
             return dict_routed
 
