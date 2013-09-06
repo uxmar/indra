@@ -1,6 +1,7 @@
 import kivy
 kivy.require('1.1.3')
 
+from stations import master_data
 from kivy.app import App
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.accordion import Accordion, AccordionItem
@@ -14,7 +15,7 @@ from kivy.uix.scatter import Scatter
 from kivy.uix.treeview import TreeView, TreeViewLabel
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
-from kivy.properties import StringProperty, ListProperty
+from kivy.properties import StringProperty, ListProperty, ObjectProperty
 from kivy.clock import Clock
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -30,6 +31,10 @@ import re
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.graphics import Color, Rectangle
+from kivy.graphics import Line
+
+class Line(FloatLayout):
+    pass
 
 class ComboEdit(TextInput):
     '''
@@ -73,15 +78,15 @@ class ComboEdit(TextInput):
 class ColorLayout(FloatLayout):
     pass
 
-class ColorLayoutPy(FloatLayout):
+class LineSeparator(FloatLayout):
 
     def __init__(self, **kwargs):
-        super(ColorLayoutPy, self).__init__(**kwargs)
+        super(LineSeparator, self).__init__(**kwargs)
 
         with self.canvas.before:
-            Color(255, 255, 255, 255)
+            Color(0, 0, 0, 0)
             self.rect = Rectangle(
-                            size=self.size,
+                            size="2dp",
                             pos=self.pos)
 
         self.bind(
@@ -91,6 +96,72 @@ class ColorLayoutPy(FloatLayout):
     def _update_rect(self, instance, value):
         self.rect.pos = instance.pos
         self.rect.size = instance.size
+
+#~ class Line(FloatLayout):
+#~ 
+    #~ def __init__(self, points=[], loop=False, *args, **kwargs):
+        #~ super(Line, self).__init__(*args, **kwargs)
+        #~ self.d = 10
+        #~ self.points = points
+        #~ self.current_point = None
+#~ 
+        #~ with self.canvas.before:
+#~ 
+            #~ Color(0.0, 0.0, 0.0)
+            #~ self.line = Line(
+                    #~ points=self.points+self.points[:2],
+                    #~ dash_offset=10,
+                    #~ dash_length=100)
+            #~ self.bind(
+                        #~ size=self._update_rect,
+                        #~ pos=self._update_rect)
+
+class OptionsView(ModalView):
+
+    def __init__(self,list_sta_trans):
+        super(OptionsView, self).__init__(auto_dismiss=False)
+        self.clear_widgets()
+        self.list_sta_trans = list_sta_trans
+        self.on_open = self.show_option_view
+
+
+    def show_option_view(self):
+        color = ColorLayout()
+        line_separator = Line()
+        boxl = BoxLayout(orientation= 'vertical',anchor_y= "top")
+        gl1 = GridLayout(cols=3,size_hint_x=None, width="300dp",row_default_height= "60dp",row_force_default=True,pos_hint= {'center_x':.5, 'center_y':.7})
+        text=''
+        i=0
+        for resume in self.list_sta_trans:
+            i=i+1
+            
+            text = 'OPCION ' + str(i)
+            color_text = '[color=000000]' + text + '[/color]'
+            label_option = Label(text=color_text,size_hint=(None, None),markup=True)
+            label_option.width="90dp"
+            gl1.add_widget(label_option)
+            
+            text = 'Estaciones: '+str(resume['stations'] \
+            )+'\nTransferencias: '+str (resume['transfers'])
+            color_text = '[color=000000]' + text + '[/color]'
+            button_info = Label(text=color_text,halign='left',markup=True)
+            button_info.width="130dp"
+            gl1.add_widget(button_info)
+            
+            button = Button(text='Button \n HOLA', size_hint=(None, None))
+            button.height="60dp"
+            button.width="80dp"
+            gl1.add_widget(button)
+            #~ gl1.add_widget(line_separator)
+            boxl.add_widget(line_separator)
+        boxl.add_widget(gl1)
+        
+        color.add_widget(boxl)
+        
+    
+        
+        self.add_widget(color)
+
 
 class RouteResult(ModalView):
 
@@ -107,17 +178,19 @@ class RouteResult(ModalView):
         i=1
         for x in self.list_route:
             item = AccordionItem(title='OPCION ' + str(i))
-            color = ColorLayoutPy()
+            color = ColorLayout()
             
             boxl = BoxLayout(orientation= 'vertical',height= "500dp")
             gl = GridLayout(cols=1, spacing=10, size_hint_y=None,row_default_height= "15dp",row_force_default=True)
+            #~ gl = GridLayout(cols=1, spacing=10, size_hint_y=None,row_default_height= "15dp",row_force_default=True,col_force_default=True, col_default_width= "50dp")
             gl.bind(minimum_height=gl.setter('height'))
 
-            scroll = ScrollView(size_hint=(None, None), size=(500, 500),
+            scroll = ScrollView(size_hint=(None, None), size=(500, 600),
             pos_hint={'center_x':.5, 'center_y':.5})
 
             for m in x:
                 p= Label(text='[color=000000]' + m + '[/color]',halign='left',text_size=(300, None),markup=True)
+                #~ p= Label(text='[color=000000]' + 'Indicate whether the label should attempt to shorten its textual contents as much as possible if a size is given. Setting this to True without an appropriately set size will lead to unexpected results.' + '[/color]',halign='left',markup=True)
                 gl.add_widget(p)
 
             scroll.add_widget(gl)
@@ -136,10 +209,26 @@ class RouteResult(ModalView):
 
 class StandardWidgets(Screen):
 
-    rtsstr = StringProperty("".join(("Maternidad,,,Sabana Grande,,,Maternidad,,,",
-                        "Zoologico,,,La Hoyada,,,La Bandera",
-                        ",,,Agua Salud,,,Altamira,,,substrate_",
-                        "silicon,,,")))
+    rtsstr = StringProperty("".join(("Caricuao,,,Zoologico,,,Caricuao",
+    
+                        ",,,Propatria,,,Perez Bonalde,,,Plaza Sucre",
+                        ",,,Gato Negro,,,Agua Salud,,,Cano Amarillo",
+                        ",,,Capitolio,,,La Hoyada,,,Parque Carabobo",
+                        ",,,Bellas Artes,,,Colegio de Ingenieros,,,Plaza Venezuela",
+                        ",,,Sabana Grande,,,Chacaito,,,Chacao",
+                        ",,,Altamira,,,Miranda,,,Los Dos Caminos",
+                        ",,,Los Cortijos,,,La California,,,Palo Verde,,,Petare",
+                        
+                        ",,,Mamera,,,Antimano,,,Carapita,,,La Yaguara",
+                        ",,,La Paz,,,Artigas,,,Maternidad,,,Capuchinos,,,Silencio",
+                        
+                        ",,,Ruiz Pineda,,,Las Adjuntas",
+                        
+                        ",,,Teatros,,,Nuevo Circo,,,Parque Central,,,Zona Rental",
+                        
+                        ",,,Ciudad Universitaria,,,Los Simbolos,,,La Bandera",
+                        ",,,El Valle,,,Los Jardines,,,Coche,,,Mercado",
+                        ",,,La Rinconada,,,")))
 
     def get_string_route(self, dict_route):
         
@@ -149,7 +238,7 @@ class StandardWidgets(Screen):
         for option in dict_route:
             for direction_route in dict_route[option]:
 
-                if direction_route['Line'] in ['line_20','line21']:
+                if direction_route['Line'] in ['line_20','line_21']:
                     line= '2'
                 else:
                     line = direction_route['Line'].split('_')[1]
@@ -170,19 +259,13 @@ class StandardWidgets(Screen):
     def get_route(self, instance):
         
         d=train_ccs()
-        station_a = d.find_station(self.station_a.text)
-        station_b = d.find_station(self.station_b.text)
         
-        if station_a[1]==station_b[1]:
-            a= d.get_route(station_a,station_b)
-            print a 
-        else:
-            dict_lines, dict_sort = d.get_dict_option(station_a,station_b)
-            dict_station_line = d.get_station_line(dict_lines,dict_sort)
-            a= d.get_route_options(dict_station_line)
-            print a
-
-        route = RouteResult(self.get_string_route(a))
+        #~ class_mdata = master_data()
+        class_train_ccs = train_ccs()
+        #~ list_path = class_train_ccs.find_all_paths(class_mdata.graph, \
+        #~ self.station_a.text,self.station_b.text)
+        
+        route = OptionsView(class_train_ccs.get_options())
         route.open()
 
     def on_text(self, instance, value):
