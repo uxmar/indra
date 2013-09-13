@@ -1,8 +1,8 @@
 import kivy
 kivy.require('1.1.3')
 
-from stations import master_data
 from kivy.app import App
+from stations import master_data
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.accordion import Accordion, AccordionItem
 from kivy.properties import NumericProperty
@@ -32,9 +32,9 @@ from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.graphics import Color, Rectangle
 from kivy.graphics import Line
+from functools import partial
+from kivy.core.window import Window
 
-class Line(FloatLayout):
-    pass
 
 class ComboEdit(TextInput):
     '''
@@ -74,47 +74,27 @@ class ComboEdit(TextInput):
         self.text = value
         self.list_station.append(value)
 
-
 class ColorLayout(FloatLayout):
     pass
 
-class LineSeparator(FloatLayout):
-
+class MultiLineLabel(Button):
     def __init__(self, **kwargs):
-        super(LineSeparator, self).__init__(**kwargs)
+        super(MultiLineLabel, self).__init__( **kwargs)
+        self.text_size = self.size
+        self.bind(size= self.on_size)
+        self.bind(text= self.on_text_changed)
+        self.size_hint_y = None # Not needed here
 
-        with self.canvas.before:
-            Color(0, 0, 0, 0)
-            self.rect = Rectangle(
-                            size="2dp",
-                            pos=self.pos)
+    def on_size(self, widget, size):
+        self.text_size = size[0], None
+        self.texture_update()
+        if self.size_hint_y == None and self.size_hint_x != None:
+            self.height = max(self.texture_size[1], self.line_height)
+        elif self.size_hint_x == None and self.size_hint_y != None:
+            self.width  = self.texture_size[0]
 
-        self.bind(
-                    size=self._update_rect,
-                    pos=self._update_rect)
-
-    def _update_rect(self, instance, value):
-        self.rect.pos = instance.pos
-        self.rect.size = instance.size
-
-#~ class Line(FloatLayout):
-#~ 
-    #~ def __init__(self, points=[], loop=False, *args, **kwargs):
-        #~ super(Line, self).__init__(*args, **kwargs)
-        #~ self.d = 10
-        #~ self.points = points
-        #~ self.current_point = None
-#~ 
-        #~ with self.canvas.before:
-#~ 
-            #~ Color(0.0, 0.0, 0.0)
-            #~ self.line = Line(
-                    #~ points=self.points+self.points[:2],
-                    #~ dash_offset=10,
-                    #~ dash_length=100)
-            #~ self.bind(
-                        #~ size=self._update_rect,
-                        #~ pos=self._update_rect)
+    def on_text_changed(self, widget, text):
+        self.on_size(self, self.size)
 
 class OptionsView(ModalView):
 
@@ -124,10 +104,21 @@ class OptionsView(ModalView):
         self.list_sta_trans = list_sta_trans
         self.on_open = self.show_option_view
 
+    def show_view_list_path(self,path):
+        self.clear_widgets()
+        color = ColorLayout()
+        grid = GridLayout(cols=1,size_hint_x=None, width=Window.width,pos_hint= {'center_x':.5, 'center_y':.5})
+        
+        for i in path:
+            text = '[color=333333]' + i + '[/color]'
+            l = MultiLineLabel(text=text,font_size="16dp", background_color=(255,255,255,255), markup=True)
+            grid.add_widget(l)
+        
+        color.add_widget(grid)
+        self.add_widget(color)
 
     def show_option_view(self):
         color = ColorLayout()
-        line_separator = Line()
         boxl = BoxLayout(orientation= 'vertical',anchor_y= "top")
         gl1 = GridLayout(cols=3,size_hint_x=None, width="300dp",row_default_height= "60dp",row_force_default=True,pos_hint= {'center_x':.5, 'center_y':.7})
         text=''
@@ -144,68 +135,19 @@ class OptionsView(ModalView):
             text = 'Estaciones: '+str(resume['stations'] \
             )+'\nTransferencias: '+str (resume['transfers'])
             color_text = '[color=000000]' + text + '[/color]'
-            button_info = Label(text=color_text,halign='left',markup=True)
-            button_info.width="130dp"
-            gl1.add_widget(button_info)
+            label_info = Label(text=color_text,halign='left',markup=True)
+            label_info.width="130dp"
+            gl1.add_widget(label_info)
             
             button = Button(text='Button \n HOLA', size_hint=(None, None))
             button.height="60dp"
             button.width="80dp"
+            button.bind(on_press = lambda widget: self.show_view_list_path(resume['path']))
             gl1.add_widget(button)
-            #~ gl1.add_widget(line_separator)
-            boxl.add_widget(line_separator)
-        boxl.add_widget(gl1)
-        
-        color.add_widget(boxl)
-        
-    
-        
-        self.add_widget(color)
-
-
-class RouteResult(ModalView):
-
-    def __init__(self,list_route):
-        super(RouteResult, self).__init__(auto_dismiss=False)
-        self.clear_widgets()
-        self.list_route = list_route
-        self.on_open = self.show_view_result
-
-
-    def show_view_result(self):
-
-        root = Accordion(orientation='vertical',anchor_x='center')
-        i=1
-        for x in self.list_route:
-            item = AccordionItem(title='OPCION ' + str(i))
-            color = ColorLayout()
             
-            boxl = BoxLayout(orientation= 'vertical',height= "500dp")
-            gl = GridLayout(cols=1, spacing=10, size_hint_y=None,row_default_height= "15dp",row_force_default=True)
-            #~ gl = GridLayout(cols=1, spacing=10, size_hint_y=None,row_default_height= "15dp",row_force_default=True,col_force_default=True, col_default_width= "50dp")
-            gl.bind(minimum_height=gl.setter('height'))
-
-            scroll = ScrollView(size_hint=(None, None), size=(500, 600),
-            pos_hint={'center_x':.5, 'center_y':.5})
-
-            for m in x:
-                p= Label(text='[color=000000]' + m + '[/color]',halign='left',text_size=(300, None),markup=True)
-                #~ p= Label(text='[color=000000]' + 'Indicate whether the label should attempt to shorten its textual contents as much as possible if a size is given. Setting this to True without an appropriately set size will lead to unexpected results.' + '[/color]',halign='left',markup=True)
-                gl.add_widget(p)
-
-            scroll.add_widget(gl)
-            boxl.add_widget(scroll)
-            color.add_widget(boxl)
-            item.add_widget(color)
-            root.add_widget(item)
-            button = Button(text="Go Back", auto_dismiss=False, size_hint=(None, None), pos_hint= {'center_x':.5, 'center_y':.7})
-            button.height="45dp"
-            button.width="220dp"
-            button.bind(on_press=self.dismiss)
-            boxl.add_widget(button)
-            i=i+1
-        self.add_widget(root)
-
+        boxl.add_widget(gl1)
+        color.add_widget(boxl)
+        self.add_widget(color)
 
 class StandardWidgets(Screen):
 
@@ -230,42 +172,13 @@ class StandardWidgets(Screen):
                         ",,,El Valle,,,Los Jardines,,,Coche,,,Mercado",
                         ",,,La Rinconada,,,")))
 
-    def get_string_route(self, dict_route):
-        
-        list_route =[]
-        list_list_route = []
-        
-        for option in dict_route:
-            for direction_route in dict_route[option]:
-
-                if direction_route['Line'] in ['line_20','line_21']:
-                    line= '2'
-                else:
-                    line = direction_route['Line'].split('_')[1]
-
-                list_route.append('Linea: ' + line)
-                list_route.append('Direccion: ' + direction_route['Direction'])
-                list_route.append('Estaciones:')
-                
-                for station in direction_route['Route']:
-                    list_route.append(station)
-                
-            if list_route:
-                list_list_route.append(list_route)
-            list_route =[]
-
-        return list_list_route
-
     def get_route(self, instance):
         
-        d=train_ccs()
-        
-        #~ class_mdata = master_data()
         class_train_ccs = train_ccs()
-        #~ list_path = class_train_ccs.find_all_paths(class_mdata.graph, \
-        #~ self.station_a.text,self.station_b.text)
         
-        route = OptionsView(class_train_ccs.get_options())
+        list_sta_trans = class_train_ccs.get_options(self.station_a.text,self.station_b.text)
+        
+        route = OptionsView(list_sta_trans)
         route.open()
 
     def on_text(self, instance, value):
