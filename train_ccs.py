@@ -42,6 +42,13 @@ class train_ccs(object):
         llist_sta_partial=[]
         direction=''
 
+        print start, end
+
+        print 'PATHS', list_path
+
+        print ''
+        print ''
+
         for path in list_path:
             qty_trans=0
             dict_sta_trans = {}
@@ -52,7 +59,7 @@ class train_ccs(object):
                 list_sta_partial.append(i)
                 
                 if class_mdata.connection.get(i,) and j==class_mdata.connection[i]: 
-                    qty_trans = qty_trans + 1
+                    qty_trans = qty_trans + 1  #se puede retornar de la funcion get_trans
 
                 if list_sta_partial[0] =='Silencio' and path[len(path)-1] in ['Zoologico','Caricuao','Las Adjuntas','Ruiz Pineda']:
                     class_mdata.connection.update({'Mamera':'Ruiz Pineda'})
@@ -65,10 +72,19 @@ class train_ccs(object):
                     [class_mdata.line[list_sta_partial[pos_stab]]] \
                     [list_sta_partial[pos_stab]]
                     
+                    
+                    
+                    print 'Desde', list_sta_partial[0]
+                    print 'Hasta', list_sta_partial[pos_stab]
+                    print 'valor_dir',valor_dir
+                    
                     if valor_dir >=1:
                         direction = class_mdata.direction[class_mdata.line[list_sta_partial[0]]]['direction'][1]
                     elif valor_dir < 0:
                         direction = class_mdata.direction[class_mdata.line[list_sta_partial[0]]]['direction'][0]
+                    
+                    
+                    
                     
                     list_path_end.append('Ingrese al tren con direccion ' + direction)
                     list_path_end.append('Continue ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + i)
@@ -123,7 +139,7 @@ def main():
 
     class_master_data = master_data()
     class_train_ccs = train_ccs()
-        
+    
     print class_train_ccs.get_options('Las Adjuntas','Silencio')
     #~ print class_train_ccs.transfer_qty()
     
