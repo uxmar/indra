@@ -112,6 +112,16 @@ class train_ccs(object):
         [class_mdata.line[list_sta_partial[pos_stab]]] \
         [list_sta_partial[pos_stab]]
     
+        print 'VALOR 1', class_mdata.direction[class_mdata.line \
+        [list_sta_partial[0]]] \
+        [list_sta_partial[0]]
+        
+        print 'VALIR 2', class_mdata.direction \
+        [class_mdata.line[list_sta_partial[pos_stab]]] \
+        [list_sta_partial[pos_stab]]
+        
+        print 'VALOR'
+        
      
         #Si es mayor o igual que 1, la transferencia esta en la segunda posicion de la tupla
         if valor_dir >=1:
@@ -120,6 +130,7 @@ class train_ccs(object):
         elif valor_dir < 0:
             direction = class_mdata.direction[class_mdata.line[list_sta_partial[0]]]['direction'][0]
         
+        print 'DIRECTION', direction
         return direction, pos_stab
 
     def get_options(self,start,end):
