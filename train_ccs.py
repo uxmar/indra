@@ -175,7 +175,8 @@ class train_ccs(object):
             line='2'
             if not class_mdata.line[path[0]] in ['21','20']:
                 line=class_mdata.line[path[0]]
-            list_path_end.append('Aborde la estacion ' + path[0] + ' de la Linea ' + line)
+            list_path_end.append({'text':'Aborde la estacion ' + path[0] + ' de la Linea ' + line,
+                                  'stations':[]})
 
             for i,j in zip(path,path[1::]):
                 list_sta_partial.append(i)
@@ -188,27 +189,34 @@ class train_ccs(object):
                     line='2'
                     if not class_mdata.line[j] in ['21','20']:
                         line=class_mdata.line[j]
-                    direction and list_path_end.append('Ingrese al tren con direccion ' + direction)
-
+                    direction and list_path_end.append({'text':'Ingrese al tren con direccion ' + direction,
+                                                        'stations':[]})
                     if dict_connec[i][j]:
                         if str(len(list_sta_partial)) > 1:
-                            list_path_end.append('Continue ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + list_sta_partial[len(list_sta_partial)-1])
-                        list_path_end.append('Realice Transferencia de tren en la estacion ' + list_sta_partial[len(list_sta_partial)-1])
+                            list_path_end.append({'text':'Continue ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + list_sta_partial[len(list_sta_partial)-1],
+                                                  'stations':list_sta_partial})
+                        list_path_end.append({'text':'Realice Transferencia de tren en la estacion ' + list_sta_partial[len(list_sta_partial)-1],
+                                              'stations':[]})
                     else:
                         if len(list_sta_partial) > 1:
-                            list_path_end.append('Continue ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + i)
-                        list_path_end.append('Realice Transferencia en la estacion '+ i + ' a la Linea ' + line + ' hasta la estacion ' + j)
+                            list_path_end.append({'text':'Continue ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + i,
+                                                  'stations':list_sta_partial})
+                        list_path_end.append({'text':'Realice Transferencia en la estacion '+ i + ' a la Linea ' + line + ' hasta la estacion ' + j,
+                                              'stations':[]})
 
                     llist_sta_partial.append(list_sta_partial)
                     list_sta_partial=[]
             
             direction, pos_stab = self.get_direction(list_sta_partial,class_mdata)
             
-            direction and list_path_end.append('Ingrese al tren con direccion ' + direction)
+            direction and list_path_end.append({'text':'Ingrese al tren con direccion ' + direction,
+                                                'stations':[]})
             llist_sta_partial.append(list_sta_partial)
             if len(list_sta_partial)>1:
-                list_path_end.append('Continue ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + j)
-            list_path_end.append('Usted ha llegado a su destino')
+                list_path_end.append({'text':'Continue ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + j,
+                                      'stations':list_sta_partial})
+            list_path_end.append({'text':'Usted ha llegado a su destino',
+                                  'stations':[]})
 
             dict_sta_trans.update({'stations':len(path)})
             dict_sta_trans.update({'transfers':qty_trans})

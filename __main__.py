@@ -113,7 +113,7 @@ class OptionsView(ModalView):
         grid = GridLayout(cols=1,size_hint_x=None, width=Window.width,pos_hint= {'center_x':.5, 'center_y':.5})
         
         for i in path:
-            text = '[color=333333]' + i + '[/color]'
+            text = '[color=333333]' + i['text'] + '[/color]'
             l = MultiLineLabel(text=text,font_size="16dp", background_color=(255,255,255,255), markup=True)
             l.bind(on_press = lambda widget: self.show_option_view())
             grid.add_widget(l)
