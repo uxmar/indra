@@ -1,3 +1,6 @@
+
+
+
 from stations import master_data
 from copy import deepcopy
 
@@ -76,9 +79,9 @@ class train_ccs(object):
             if dict_connec.get('Ruiz Pineda',) and \
             dict_connec['Ruiz Pineda'].get('Mamera',):
                 dict_connec['Ruiz Pineda'].pop('Mamera')
-                
+                p
         #Las Adjuntas - Zona Rental
-        print 'list_sta_partial',list_sta_partial
+        #~ print 'list_sta_partial',list_sta_partial
         if list_sta_partial[0] in class_mdata.direction['21'].keys():
             for i in path:
                 if i in class_mdata.direction['4'].keys():
@@ -102,59 +105,54 @@ class train_ccs(object):
         #Las Adjuntas - Silencio
         if list_sta_partial[0] in class_mdata.direction['21'].keys() and \
         path[len(path)-1] in class_mdata.direction['2'].keys():
-            if dict_connec.get('Caricuao',) and \
-            dict_connec['Caricuao'].get('Mamera',):
-                dict_connec['Caricuao'].pop('Mamera')
+            if dict_connec.get('Mamera',) and \
+            dict_connec['Mamera'].get('Antimano',):
+                dict_connec['Mamera'].pop('Antimano')
         return dict_connec
         
     def get_direction(self,list_sta_partial,class_mdata):
         
         valor_dir=0
         direction=''
+        pos_stab=0
+        #~ if len(list_sta_partial) >=2:
+            #~ pos_stab=len(list_sta_partial)-2
+        #~ else:
         
-        if len(list_sta_partial) >=2:
+        if list_sta_partial:
+        
             pos_stab=len(list_sta_partial)-2
-        else:
-            pos_stab=len(list_sta_partial)-1
-        valor_dir = class_mdata.direction[class_mdata.line \
-        [list_sta_partial[0]]] \
-        [list_sta_partial[0]]-class_mdata.direction \
-        [class_mdata.line[list_sta_partial[pos_stab]]] \
-        [list_sta_partial[pos_stab]]
-    
-        #~ print ''
-    #~ 
-        #~ print 'LIST 1', list_sta_partial
-    #~ 
-        #~ print 'VALOR 1->', class_mdata.direction[class_mdata.line \
-        #~ [list_sta_partial[0]]] \
-        #~ [list_sta_partial[0]]
-        #~ 
-        #~ print 'LINEA VALOR 1', class_mdata.direction[class_mdata.line \
-        #~ [list_sta_partial[0]]]
-#~ 
-        #~ print '----------------------------------------------'
-    #~ 
-        #~ print 'LIST 2', list_sta_partial
-#~ 
-        #~ print 'VALIR 2->', class_mdata.direction \
-        #~ [class_mdata.line[list_sta_partial[pos_stab]]] \
-        #~ [list_sta_partial[pos_stab]]
-        #~ 
-        #~ print 'LINEA VALOR 2', class_mdata.direction \
-        #~ [class_mdata.line[list_sta_partial[pos_stab]]]
-        #~ 
-        #~ print '***'
-        #~ 
-        #~ print 'VALOR ->',valor_dir 
-        
-     
-        #Si es mayor o igual que 1, la transferencia esta en la segunda posicion de la tupla
-        if valor_dir >=1:
-            direction = class_mdata.direction[class_mdata.line[list_sta_partial[0]]]['direction'][1]
-        #Si es menor que 0, la transferencia esta en la primera posicion de la tupla
-        elif valor_dir < 0:
-            direction = class_mdata.direction[class_mdata.line[list_sta_partial[0]]]['direction'][0]
+
+            print 'list_sta_partial',list_sta_partial
+            print 'VALOR 1->', class_mdata.direction[class_mdata.line \
+            [list_sta_partial[0]]] \
+            [list_sta_partial[0]]
+            print 'Estaciones', class_mdata.direction[class_mdata.line \
+            [list_sta_partial[0]]]
+            
+            print ''
+            
+            print 'VALOR 2->',class_mdata.direction \
+            [class_mdata.line[list_sta_partial[pos_stab]]] \
+            [list_sta_partial[pos_stab]]
+            print 'Estaciones', class_mdata.direction \
+            [class_mdata.line[list_sta_partial[pos_stab]]]
+            
+
+            valor_dir = class_mdata.direction[class_mdata.line \
+            [list_sta_partial[0]]] \
+            [list_sta_partial[0]]-class_mdata.direction \
+            [class_mdata.line[list_sta_partial[pos_stab]]] \
+            [list_sta_partial[pos_stab]]
+
+            print ''
+            
+            #Si es mayor o igual que 1, la transferencia esta en la segunda posicion de la tupla
+            if valor_dir >=1:
+                direction = class_mdata.direction[class_mdata.line[list_sta_partial[0]]]['direction'][1]
+            #Si es menor que 0, la transferencia esta en la primera posicion de la tupla
+            elif valor_dir < 0:
+                direction = class_mdata.direction[class_mdata.line[list_sta_partial[0]]]['direction'][0]
         
         return direction, pos_stab
 
@@ -242,7 +240,7 @@ def main():
     class_master_data = master_data()
     class_train_ccs = train_ccs()
     
-    print class_train_ccs.get_options('Las Adjuntas','Altamira')
+    print class_train_ccs.get_options('Maternidad','Las Adjuntas')
     #~ print class_train_ccs.get_options('Altamira','Las Adjuntas')
     #~ print class_train_ccs.transfer_qty()
     

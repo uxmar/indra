@@ -89,7 +89,7 @@ class MultiLineLabel(Button):
         self.text_size = size[0], None
         self.texture_update()
         if self.size_hint_y == None and self.size_hint_x != None:
-            self.height = max(self.texture_size[1], self.line_height)
+            self.height = max(self.texture_size[1]+32, self.line_height)
         elif self.size_hint_x == None and self.size_hint_y != None:
             self.width  = self.texture_size[0]
 
@@ -107,14 +107,25 @@ class OptionsView(ModalView):
     def show_view_list_path(self,path):
         self.clear_widgets()
         color = ColorLayout()
+        
+        boxl = BoxLayout(orientation= 'vertical',anchor_y= "top")
+        
         grid = GridLayout(cols=1,size_hint_x=None, width=Window.width,pos_hint= {'center_x':.5, 'center_y':.5})
         
         for i in path:
             text = '[color=333333]' + i + '[/color]'
             l = MultiLineLabel(text=text,font_size="16dp", background_color=(255,255,255,255), markup=True)
+            l.bind(on_press = lambda widget: self.show_option_view())
             grid.add_widget(l)
+            
+        button_back_2 = Button(text="Go Back", auto_dismiss=False, size_hint=(None, None), pos_hint= {'center_x':.5, 'center_y':.7})
+        button_back_2.height="50dp"
+        button_back_2.width="100dp"
+        button_back_2.bind(on_press = lambda widget: self.show_option_view())
         
-        color.add_widget(grid)
+        boxl.add_widget(grid)
+        boxl.add_widget(button_back_2)
+        color.add_widget(boxl)
         self.add_widget(color)
 
     def show_option_view(self):
@@ -144,8 +155,14 @@ class OptionsView(ModalView):
             button.width="80dp"
             button.bind(on_press = lambda widget: self.show_view_list_path(resume['path']))
             gl1.add_widget(button)
-            
+        
+        button_back_1 = Button(text="Go Back", auto_dismiss=False, size_hint=(None, None), pos_hint= {'center_x':.5, 'center_y':.7})
+        button_back_1.height="50dp"
+        button_back_1.width="100dp"
+        button_back_1.bind(on_press=self.dismiss)
+        
         boxl.add_widget(gl1)
+        boxl.add_widget(button_back_1)
         color.add_widget(boxl)
         self.add_widget(color)
 
