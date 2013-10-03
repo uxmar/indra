@@ -123,20 +123,20 @@ class train_ccs(object):
         
             pos_stab=len(list_sta_partial)-2
 
-            print 'list_sta_partial',list_sta_partial
-            print 'VALOR 1->', class_mdata.direction[class_mdata.line \
-            [list_sta_partial[0]]] \
-            [list_sta_partial[0]]
-            print 'Estaciones', class_mdata.direction[class_mdata.line \
-            [list_sta_partial[0]]]
-            
-            print ''
-            
-            print 'VALOR 2->',class_mdata.direction \
-            [class_mdata.line[list_sta_partial[pos_stab]]] \
-            [list_sta_partial[pos_stab]]
-            print 'Estaciones', class_mdata.direction \
-            [class_mdata.line[list_sta_partial[pos_stab]]]
+            #~ print 'list_sta_partial',list_sta_partial
+            #~ print 'VALOR 1->', class_mdata.direction[class_mdata.line \
+            #~ [list_sta_partial[0]]] \
+            #~ [list_sta_partial[0]]
+            #~ print 'Estaciones', class_mdata.direction[class_mdata.line \
+            #~ [list_sta_partial[0]]]
+            #~ 
+            #~ print ''
+            #~ 
+            #~ print 'VALOR 2->',class_mdata.direction \
+            #~ [class_mdata.line[list_sta_partial[pos_stab]]] \
+            #~ [list_sta_partial[pos_stab]]
+            #~ print 'Estaciones', class_mdata.direction \
+            #~ [class_mdata.line[list_sta_partial[pos_stab]]]
             
 
             valor_dir = class_mdata.direction[class_mdata.line \
@@ -145,7 +145,7 @@ class train_ccs(object):
             [class_mdata.line[list_sta_partial[pos_stab]]] \
             [list_sta_partial[pos_stab]]
 
-            print ''
+            #~ print ''
             
             #Si es mayor o igual que 1, la transferencia esta en la segunda posicion de la tupla
             if valor_dir >=1:
@@ -161,6 +161,7 @@ class train_ccs(object):
         class_mdata = master_data()
         list_path = self.find_all_paths(class_mdata.graph,start,end)
         list_sta_trans,list_sta_partial,llist_sta_partial= [],[],[]
+        dict_transitory={}
 
         print start, end
         print 'PATHS', list_path
@@ -193,13 +194,13 @@ class train_ccs(object):
                                                         'stations':[]})
                     if dict_connec[i][j]:
                         if str(len(list_sta_partial)) > 1:
-                            list_path_end.append({'text':'Continue ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + list_sta_partial[len(list_sta_partial)-1],
+                            list_path_end.append({'text':'Continue ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + list_sta_partial[len(list_sta_partial)-1] + ' ->',
                                                   'stations':list_sta_partial})
                         list_path_end.append({'text':'Realice Transferencia de tren en la estacion ' + list_sta_partial[len(list_sta_partial)-1],
                                               'stations':[]})
                     else:
                         if len(list_sta_partial) > 1:
-                            list_path_end.append({'text':'Continue ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + i,
+                            list_path_end.append({'text':'Continue ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + i + ' ->',
                                                   'stations':list_sta_partial})
                         list_path_end.append({'text':'Realice Transferencia en la estacion '+ i + ' a la Linea ' + line + ' hasta la estacion ' + j,
                                               'stations':[]})
@@ -213,7 +214,7 @@ class train_ccs(object):
                                                 'stations':[]})
             llist_sta_partial.append(list_sta_partial)
             if len(list_sta_partial)>1:
-                list_path_end.append({'text':'Continue ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + j,
+                list_path_end.append({'text':'Continue ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + j + ' ->',
                                       'stations':list_sta_partial})
             list_path_end.append({'text':'Usted ha llegado a su destino',
                                   'stations':[]})
@@ -221,8 +222,11 @@ class train_ccs(object):
             dict_sta_trans.update({'stations':len(path)})
             dict_sta_trans.update({'transfers':qty_trans})
             dict_sta_trans.update({'path':list_path_end})
-            list_sta_trans.append(dict_sta_trans)
-        
+            dict_transitory.update({len(path):dict_sta_trans})
+
+        for key, value in sorted(dict_transitory.iteritems(), key=lambda (k,v): (v,k)):
+            list_sta_trans.append(value)
+
         return list_sta_trans
 
     def min_path(self, graph, start, end):
@@ -248,7 +252,7 @@ def main():
     class_master_data = master_data()
     class_train_ccs = train_ccs()
     
-    print class_train_ccs.get_options('Maternidad','Las Adjuntas')
+    print class_train_ccs.get_options('Agua Salud','Teatros')
     #~ print class_train_ccs.get_options('Altamira','Las Adjuntas')
     #~ print class_train_ccs.transfer_qty()
     

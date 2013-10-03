@@ -2,6 +2,7 @@ import kivy
 kivy.require('1.1.3')
 
 from kivy.app import App
+from kivy.lang import Builder
 from stations import master_data
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.accordion import Accordion, AccordionItem
@@ -24,7 +25,6 @@ from kivy.uix.modalview import ModalView
 import random
 from train_ccs import train_ccs
 from kivy.uix.textinput import TextInput
-from kivy.uix.dropdown import DropDown
 from kivy.adapters.listadapter import ListAdapter
 from kivy.uix.listview import ListItemButton, ListView
 import re
@@ -34,6 +34,8 @@ from kivy.graphics import Color, Rectangle
 from kivy.graphics import Line
 from functools import partial
 from kivy.core.window import Window
+from functools import partial
+from kivy.uix.dropdown import DropDown
 
 
 class ComboEdit(TextInput):
@@ -104,27 +106,47 @@ class OptionsView(ModalView):
         self.list_sta_trans = list_sta_trans
         self.on_open = self.show_option_view
 
-    def show_view_list_path(self,path):
+    def show_list_stations(self, *args, **kwargs):
         self.clear_widgets()
         color = ColorLayout()
-        
         boxl = BoxLayout(orientation= 'vertical',anchor_y= "top")
-        
         grid = GridLayout(cols=1,size_hint_x=None, width=Window.width,pos_hint= {'center_x':.5, 'center_y':.5})
         
-        for i in path:
-            text = '[color=333333]' + i['text'] + '[/color]'
-            l = MultiLineLabel(text=text,font_size="16dp", background_color=(255,255,255,255), markup=True)
-            l.bind(on_press = lambda widget: self.show_option_view())
+        for j in args[0]:
+            text_st = '[color=333333]' + j + '[/color]'
+            l = MultiLineLabel(text=text_st,font_size="16dp", background_color=(255,255,255,255), markup=True)
             grid.add_widget(l)
             
-        button_back_2 = Button(text="Go Back", auto_dismiss=False, size_hint=(None, None), pos_hint= {'center_x':.5, 'center_y':.7})
-        button_back_2.height="50dp"
-        button_back_2.width="100dp"
-        button_back_2.bind(on_press = lambda widget: self.show_option_view())
+        button_back = Button(text="Go Back", auto_dismiss=False, size_hint=(None, None), pos_hint= {'center_x':.5, 'center_y':.7})
+        button_back.height="50dp"
+        button_back.width="100dp"
+        button_back.bind(on_press = lambda widget: self.show_view_list_path(args[1]))
         
         boxl.add_widget(grid)
-        boxl.add_widget(button_back_2)
+        boxl.add_widget(button_back)
+        color.add_widget(boxl)
+        self.add_widget(color)
+
+    def show_view_list_path(self, *args, **kwargs):
+        
+        self.clear_widgets()
+        color = ColorLayout()
+        boxl = BoxLayout(orientation= 'vertical',anchor_y= "top")
+        grid = GridLayout(cols=1,size_hint_x=None, width=Window.width,pos_hint= {'center_x':.5, 'center_y':.5})
+        
+        for i in args[0]:
+            text = '[color=333333]' + i['text'] + '[/color]'
+            l = MultiLineLabel(text=text,font_size="16dp", background_color=(255,255,255,255), markup=True)
+            i['stations'] and l.bind(on_press = partial(self.show_list_stations, i['stations'],args[0]))
+            grid.add_widget(l)
+            
+        button_back = Button(text="Go Back", auto_dismiss=False, size_hint=(None, None), pos_hint= {'center_x':.5, 'center_y':.7})
+        button_back.height="50dp"
+        button_back.width="100dp"
+        button_back.bind(on_press = lambda widget: self.show_option_view())
+        
+        boxl.add_widget(grid)
+        boxl.add_widget(button_back)
         color.add_widget(boxl)
         self.add_widget(color)
 
@@ -153,7 +175,7 @@ class OptionsView(ModalView):
             button = Button(text='Button \n HOLA', size_hint=(None, None))
             button.height="60dp"
             button.width="80dp"
-            button.bind(on_press = lambda widget: self.show_view_list_path(resume['path']))
+            button.bind(on_press = partial(self.show_view_list_path, resume['path']))
             gl1.add_widget(button)
         
         button_back_1 = Button(text="Go Back", auto_dismiss=False, size_hint=(None, None), pos_hint= {'center_x':.5, 'center_y':.7})
@@ -206,13 +228,53 @@ class StandardWidgets(Screen):
                                 self.rtsstr, re.IGNORECASE)
             #using a set to remove duplicates, if any.
             instance.options = list(set(match))
-        instance.drop_down.open(instance)
+            print 'INSTANCE', instance
+        if instance.get_parent_window(): 
+            instance.drop_down.open(instance)
 
 
+
+#~ sm.add_widget(StandardWidgets(name='inputstation'))
+
+#~ class TrainccsApp(App):
+#~ 
+    #~ def build(self):
+        #~ return sm
+#~ 
+#~ if __name__ == '__main__':
+    #~ TrainccsApp().run()
+
+    
+class MainWindow(Screen):
+    pass
+
+#~ sm = ScreenManager()
+#~ sm.add_widget(MainWindow(name='menu'))
+#~ sm.add_widget(StandardWidgets(name='inputstation'))
 
 class TrainccsApp(App):
 
     def __init__(self):
         super(TrainccsApp, self).__init__()
 
+
+    #~ def build(self):
+        #~ return sm
+    def build(self):
+        
+        sm = ScreenManager()
+        sm.add_widget(MainWindow(name='mainwindow'))
+        sm.add_widget(StandardWidgets(name='inputstation'))
+        
+        
+        print 'SM', sm
+        
+        return sm
+
 TrainccsApp().run()
+
+
+
+
+
+
