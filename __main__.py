@@ -34,7 +34,6 @@ from kivy.graphics import Color, Rectangle
 from kivy.graphics import Line
 from functools import partial
 from kivy.core.window import Window
-from functools import partial
 from kivy.uix.dropdown import DropDown
 
 
@@ -228,48 +227,35 @@ class StandardWidgets(Screen):
                                 self.rtsstr, re.IGNORECASE)
             #using a set to remove duplicates, if any.
             instance.options = list(set(match))
-            print 'INSTANCE', instance
         if instance.get_parent_window(): 
             instance.drop_down.open(instance)
 
-
-
-#~ sm.add_widget(StandardWidgets(name='inputstation'))
-
-#~ class TrainccsApp(App):
-#~ 
-    #~ def build(self):
-        #~ return sm
-#~ 
-#~ if __name__ == '__main__':
-    #~ TrainccsApp().run()
-
-    
 class MainWindow(Screen):
     pass
 
-#~ sm = ScreenManager()
-#~ sm.add_widget(MainWindow(name='menu'))
-#~ sm.add_widget(StandardWidgets(name='inputstation'))
-
 class TrainccsApp(App):
+
 
     def __init__(self):
         super(TrainccsApp, self).__init__()
 
-
-    #~ def build(self):
-        #~ return sm
     def build(self):
-        
         sm = ScreenManager()
         sm.add_widget(MainWindow(name='mainwindow'))
         sm.add_widget(StandardWidgets(name='inputstation'))
         
-        
-        print 'SM', sm
-        
+        Window.bind(on_keyboard=self.hook_keyboard)
+
         return sm
+
+    def hook_keyboard(self, window, key, *largs):
+        if key == 27: # BACK
+        # Irrelevant code
+            pass
+        elif key in (282, 319): # SETTINGS
+        # Irrelevant code
+            pass
+
 
 TrainccsApp().run()
 

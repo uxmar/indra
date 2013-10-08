@@ -54,90 +54,124 @@ class train_ccs(object):
         flag=False
         
         #Zona Rental - Las Adjuntas / Zona Rental - Zoologico
-        if list_sta_partial[0] in class_mdata.direction['4'].keys() and \
-        path[len(path)-1] in class_mdata.direction['99'].keys():
-            if dict_connec.get('Teatros',) and \
-            dict_connec['Teatros'].get('Capuchinos',):
-                dict_connec['Teatros'].pop('Capuchinos')
-            if dict_connec.get('Mamera',) and \
-            dict_connec['Mamera'].get('Ruiz Pineda',):
-                dict_connec['Mamera'].pop('Ruiz Pineda')
+        #~ if list_sta_partial[0] in class_mdata.direction['4'].keys() and \
+        #~ path[len(path)-1] in class_mdata.direction['99'].keys():
+            #~ if dict_connec.get('Teatros',) and \
+            #~ dict_connec['Teatros'].get('Capuchinos',):
+                #~ dict_connec['Teatros'].pop('Capuchinos')
+            #~ if dict_connec.get('Mamera',) and \
+            #~ dict_connec['Mamera'].get('Ruiz Pineda',):
+                #~ dict_connec['Mamera'].pop('Ruiz Pineda')
         
         #Silencio - Las Adjuntas / Silencio - Zoologico
-        if list_sta_partial[0] in class_mdata.direction['2'].keys() and \
-        path[len(path)-1] in class_mdata.direction['99'].keys():
-            if dict_connec.get('Mamera',) and \
-            dict_connec['Mamera'].get('Caricuao',):
-                dict_connec['Mamera'].pop('Caricuao')
+        #~ if list_sta_partial[0] in class_mdata.direction['2'].keys() and \
+        #~ path[len(path)-1] in class_mdata.direction['99'].keys():
+            #~ if dict_connec.get('Mamera',) and \
+            #~ dict_connec['Mamera'].get('Caricuao',):
+                #~ dict_connec['Mamera'].pop('Caricuao')
         
         #Zoologico - Zona Rental
-        if list_sta_partial[0] in class_mdata.direction['20'].keys() and \
-        path[len(path)-1] in class_mdata.direction['4'].keys():
-            if dict_connec.get('Capuchinos',) and \
-            dict_connec['Capuchinos'].get('Teatros',):
-                dict_connec['Capuchinos'].pop('Teatros')
-            if dict_connec.get('Ruiz Pineda',) and \
-            dict_connec['Ruiz Pineda'].get('Mamera',):
-                dict_connec['Ruiz Pineda'].pop('Mamera')
-                p
+        #~ if list_sta_partial[0] in class_mdata.direction['20'].keys() and \
+        #~ path[len(path)-1] in class_mdata.direction['4'].keys():
+            #~ if dict_connec.get('Capuchinos',) and \
+            #~ dict_connec['Capuchinos'].get('Teatros',):
+                #~ dict_connec['Capuchinos'].pop('Teatros')
+            #~ if dict_connec.get('Ruiz Pineda',) and \
+            #~ dict_connec['Ruiz Pineda'].get('Mamera',):
+                #~ dict_connec['Ruiz Pineda'].pop('Mamera')
+        
         #Las Adjuntas - Zona Rental
-        #~ print 'list_sta_partial',list_sta_partial
-        if list_sta_partial[0] in class_mdata.direction['21'].keys():
-            for i in path:
-                if i in class_mdata.direction['4'].keys():
-                    flag=True 
-                if flag:
-                    if dict_connec.get('Capuchinos',) and \
-                    dict_connec['Capuchinos'].get('Teatros',):
-                        dict_connec['Capuchinos'].pop('Teatros')
-                    if dict_connec.get('Mamera',) and \
-                    dict_connec['Mamera'].get('Antimano',):
-                        dict_connec['Mamera'].pop('Antimano')
+        #~ if list_sta_partial[0] in class_mdata.direction['21'].keys():
+            #~ 
+            #~ if 'Silencio' not in path or path[len(path)-1] in class_mdata.direction['2'].keys():
+            #~ 
+                #~ for i in path:
+                    #~ if dict_connec.get('Capuchinos',) and \
+                    #~ dict_connec['Capuchinos'].get('Teatros',):
+                        #~ dict_connec['Capuchinos'].pop('Teatros')
+                    #~ if dict_connec.get('Mamera',) and \
+                    #~ dict_connec['Mamera'].get('Antimano',):
+                        #~ dict_connec['Mamera'].pop('Antimano')
             
         
         #Zoologico - Silencio
-        if list_sta_partial[0] in class_mdata.direction['20'].keys() and \
-        path[len(path)-1] in class_mdata.direction['2'].keys():
-            if dict_connec.get('Caricuao',) and \
-            dict_connec['Caricuao'].get('Mamera',):
-                dict_connec['Caricuao'].pop('Mamera')
-        
-        #Las Adjuntas - Silencio
-        if list_sta_partial[0] in class_mdata.direction['21'].keys() and \
-        path[len(path)-1] in class_mdata.direction['2'].keys():
+        #~ if list_sta_partial[0] in class_mdata.direction['20'].keys() and \
+        #~ path[len(path)-1] in class_mdata.direction['2'].keys():
+            #~ if dict_connec.get('Caricuao',) and \
+            #~ dict_connec['Caricuao'].get('Mamera',):
+                #~ dict_connec['Caricuao'].pop('Mamera')
+
+
+        #Zoologico - Linea 2 / Silencio
+        if list_sta_partial[0] in class_mdata.direction['20'].keys():
+            
+            #Zoologico - Linea 2
+            if path[len(path)-1] in class_mdata.direction['2'].keys() and path[len(path)-1] != 'Silencio':
+            
+                if dict_connec.get('Mamera',) and \
+                dict_connec['Mamera'].get('Antimano',):
+                    dict_connec['Mamera'].pop('Antimano')
+            
+            #Zoologico - Silencio
+            if path[len(path)-1] == 'Silencio':
+            
+                if dict_connec.get('Capuchinos') and \
+                dict_connec['Capuchinos'].get('Teatros',):
+                    dict_connec['Capuchinos'].pop('Teatros')
+                if dict_connec.get('Mamera',) and \
+                dict_connec['Mamera'].get('Antimano',):
+                    dict_connec['Mamera'].pop('Antimano')
+
+
+        #Las Adjuntas - Linea 4
+        if list_sta_partial[0] in class_mdata.direction['21'].keys() and path[len(path)-1] in class_mdata.direction['4'].keys():
+            if dict_connec.get('Capuchinos',) and \
+            dict_connec['Capuchinos'].get('Teatros',):
+                dict_connec['Capuchinos'].pop('Teatros')
             if dict_connec.get('Mamera',) and \
             dict_connec['Mamera'].get('Antimano',):
                 dict_connec['Mamera'].pop('Antimano')
+
+
+        #Las Adjuntas - Linea 2 / Silencio
+        if list_sta_partial[0] in class_mdata.direction['21'].keys():
+            
+            #Las Adjuntas - Linea 2
+            if path[len(path)-1] in class_mdata.direction['2'].keys() and path[len(path)-1] != 'Silencio':
+            
+                if dict_connec.get('Mamera',) and \
+                dict_connec['Mamera'].get('Antimano',):
+                    dict_connec['Mamera'].pop('Antimano')
+            
+            #Las Adjuntas - Silencio
+            if path[len(path)-1] == 'Silencio':
+            
+                if dict_connec.get('Capuchinos') and \
+                dict_connec['Capuchinos'].get('Teatros',):
+                    dict_connec['Capuchinos'].pop('Teatros')
+
+            #Las Adjuntas - Linea1 con paseo por linea 4
+            union = list (set(path) & set(class_mdata.direction['4'].keys()))
+            inter = list(set(class_mdata.direction['4'].keys()).difference(set(union)))
+
+            if len(inter)==1 and inter[0] == 'direction':
+                if dict_connec.get('Mamera',) and \
+                dict_connec['Mamera'].get('Antimano',):
+                    dict_connec['Mamera'].pop('Antimano')
+                if dict_connec.get('Capuchinos') and \
+                dict_connec['Capuchinos'].get('Teatros',):
+                    dict_connec['Capuchinos'].pop('Teatros')
+
+
         return dict_connec
         
     def get_direction(self,list_sta_partial,class_mdata):
         
-        valor_dir=0
-        direction=''
-        pos_stab=0
-        #~ if len(list_sta_partial) >=2:
-            #~ pos_stab=len(list_sta_partial)-2
-        #~ else:
-        
+        valor_dir,pos_stab,direction=0,0,''
+
         if list_sta_partial:
         
-            pos_stab=len(list_sta_partial)-2
-
-            #~ print 'list_sta_partial',list_sta_partial
-            #~ print 'VALOR 1->', class_mdata.direction[class_mdata.line \
-            #~ [list_sta_partial[0]]] \
-            #~ [list_sta_partial[0]]
-            #~ print 'Estaciones', class_mdata.direction[class_mdata.line \
-            #~ [list_sta_partial[0]]]
-            #~ 
-            #~ print ''
-            #~ 
-            #~ print 'VALOR 2->',class_mdata.direction \
-            #~ [class_mdata.line[list_sta_partial[pos_stab]]] \
-            #~ [list_sta_partial[pos_stab]]
-            #~ print 'Estaciones', class_mdata.direction \
-            #~ [class_mdata.line[list_sta_partial[pos_stab]]]
-            
+            pos_stab=len(list_sta_partial)-1
 
             valor_dir = class_mdata.direction[class_mdata.line \
             [list_sta_partial[0]]] \
@@ -145,13 +179,11 @@ class train_ccs(object):
             [class_mdata.line[list_sta_partial[pos_stab]]] \
             [list_sta_partial[pos_stab]]
 
-            #~ print ''
-            
             #Si es mayor o igual que 1, la transferencia esta en la segunda posicion de la tupla
             if valor_dir >=1:
                 direction = class_mdata.direction[class_mdata.line[list_sta_partial[0]]]['direction'][1]
             #Si es menor que 0, la transferencia esta en la primera posicion de la tupla
-            elif valor_dir < 0:
+            elif valor_dir <= 0:
                 direction = class_mdata.direction[class_mdata.line[list_sta_partial[0]]]['direction'][0]
         
         return direction, pos_stab
@@ -168,6 +200,17 @@ class train_ccs(object):
         print ''
         print ''
         
+
+        if start in class_mdata.direction['21'].keys():
+            dict_del = {}
+            
+            if end =='Silencio' or end in class_mdata.direction['4'].keys():
+                [dict_del.update({len(path):list_path.index(path)}) for path in list_path]
+                list_path.pop(dict_del[max(dict_del.keys())])
+        
+        
+        #~ list_path.pop(0)
+        
         for path in list_path:
             qty_trans,dict_sta_trans=0,{}
             list_path_end,list_sta_partial = [],[]
@@ -180,41 +223,44 @@ class train_ccs(object):
                                   'stations':[]})
 
             for i,j in zip(path,path[1::]):
-                list_sta_partial.append(i)
+                if i not in list_sta_partial:
+                    list_sta_partial.append(i)
                 dict_connec = self.line_2(list_sta_partial,class_mdata,path,dict_connec)
                 list_trans, qty_trans = self.get_trans(list_path,class_mdata,dict_connec)
-                
                 if (i,j) in list_trans:
-                    
                     direction, pos_stab = self.get_direction(list_sta_partial,class_mdata)
                     line='2'
                     if not class_mdata.line[j] in ['21','20']:
                         line=class_mdata.line[j]
+                    print 'DIRECTION', direction
                     direction and list_path_end.append({'text':'Ingrese al tren con direccion ' + direction,
                                                         'stations':[]})
                     if dict_connec[i][j]:
                         if str(len(list_sta_partial)) > 1:
-                            list_path_end.append({'text':'Continue ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + list_sta_partial[len(list_sta_partial)-1] + ' ->',
+                            list_path_end.append({'text':'Contiiinue ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + list_sta_partial[len(list_sta_partial)-1] + ' ->',
                                                   'stations':list_sta_partial})
-                        list_path_end.append({'text':'Realice Transferencia de tren en la estacion ' + list_sta_partial[len(list_sta_partial)-1],
+                        list_path_end.append({'text':'Realiice Transferencia de tren en la estacion ' + list_sta_partial[len(list_sta_partial)-1],
                                               'stations':[]})
                     else:
                         if len(list_sta_partial) > 1:
-                            list_path_end.append({'text':'Continue ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + i + ' ->',
+                            list_path_end.append({'text':'Continueee ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + i + ' ->',
                                                   'stations':list_sta_partial})
-                        list_path_end.append({'text':'Realice Transferencia en la estacion '+ i + ' a la Linea ' + line + ' hasta la estacion ' + j,
+                        list_path_end.append({'text':'Realicee Transferencia en la estacion '+ i + ' a la Linea ' + line + ' hasta la estacion ' + j,
                                               'stations':[]})
 
                     llist_sta_partial.append(list_sta_partial)
                     list_sta_partial=[]
+                if j not in list_sta_partial:
+                    list_sta_partial.append(j)
             
+            #~ direction, pos_stab = self.get_direction(llist_sta_partial[len(llist_sta_partial)-1],class_mdata)
             direction, pos_stab = self.get_direction(list_sta_partial,class_mdata)
-            
+            print 'direction',direction
             direction and list_path_end.append({'text':'Ingrese al tren con direccion ' + direction,
                                                 'stations':[]})
             llist_sta_partial.append(list_sta_partial)
-            if len(list_sta_partial)>1:
-                list_path_end.append({'text':'Continue ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + j + ' ->',
+            if len(list_sta_partial)>=1:
+                list_path_end.append({'text':'CContinue ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + j + ' ->',
                                       'stations':list_sta_partial})
             list_path_end.append({'text':'Usted ha llegado a su destino',
                                   'stations':[]})
@@ -252,7 +298,13 @@ def main():
     class_master_data = master_data()
     class_train_ccs = train_ccs()
     
-    print class_train_ccs.get_options('Agua Salud','Teatros')
+    a= class_train_ccs.get_options('Zoologico','Silencio')
+    
+    for i in a:
+        print ''
+        for j in i['path']:
+            print j['text']
+            
     #~ print class_train_ccs.get_options('Altamira','Las Adjuntas')
     #~ print class_train_ccs.transfer_qty()
     
