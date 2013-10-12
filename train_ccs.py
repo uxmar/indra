@@ -346,7 +346,7 @@ def main():
     class_master_data = master_data()
     class_train_ccs = train_ccs()
     
-    a= class_train_ccs.get_options('Zona Rental','Silencio')
+    a= class_train_ccs.get_options('Zona Rental','Mamera')
     
     for i in a:
         print ''
