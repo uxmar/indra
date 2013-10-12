@@ -95,12 +95,14 @@ class train_ccs(object):
             #~ dict_connec['Caricuao'].get('Mamera',):
                 #~ dict_connec['Caricuao'].pop('Mamera')
 
-        #Linea 4(Zona Rental) - Linea 2
-        if list_sta_partial[0] in class_mdata.direction['4'].keys() and path[-1] in class_mdata.direction['2'].keys():
-            if dict_connec.get('Teatros',) and \
-            dict_connec['Teatros'].get('Capuchinos',):
-                dict_connec['Teatros'].pop('Capuchinos')
-
+        #Linea 4(Zona Rental) - Linea 2 / Silencio
+        if list_sta_partial[0] in class_mdata.direction['4'].keys():
+            #Linea 4(Zona Rental) - Linea 2
+            if path[-1] in class_mdata.direction['2'].keys() and path[-1] != 'Silencio':
+                if dict_connec.get('Teatros',) and \
+                dict_connec['Teatros'].get('Capuchinos',):
+                    dict_connec['Teatros'].pop('Capuchinos')
+            
         #Zoologico - Linea 2 / Silencio
         if list_sta_partial[0] in class_mdata.direction['20'].keys():
             #Zoologico - Linea 2
@@ -232,7 +234,7 @@ class train_ccs(object):
                 [dict_del.update({len(path):list_path.index(path)}) for path in list_path]
                 list_path.pop(dict_del[max(dict_del.keys())])
         
-        list_path.pop(1)
+        #~ list_path.pop(1)
         
         for path in list_path:
             qty_trans,dict_sta_trans=0,{}
@@ -255,7 +257,7 @@ class train_ccs(object):
                     l_transac.append((i,j))
                     print 'I %s J %s' % (i,j)
                     print 'list_sta_partiallll', list_sta_partial
-                    if len(list_sta_partial) > 0:unhashable
+                    if len(list_sta_partial) > 0:
                         direction= self.get_direction(list_sta_partial,class_mdata)
                         print 'DIRECTION', direction
 
@@ -302,7 +304,9 @@ class train_ccs(object):
             #~ poder llegar. Con el solo hecho de hacer la transferencia ya se llego al destino.
             #~ Ejemplo: La Hoyada - Zona Rental.
             print 'direction', direction
-            if not (dict_connec.get(i,) and dict_connec[i].get(j,)) ==3:
+            print ''
+            if not ((dict_connec.get(i,) and dict_connec[i].get(j,)) ==3) and not \
+            (l_transac and l_transac[-1][1]==end):
                 direction and list_path_end.append({'text':'Innnngrese al tren con direccion ' + direction,'stations':[]})
                 llist_sta_partial.append(list_sta_partial)
                 if len(list_sta_partial)>=1:
@@ -342,7 +346,7 @@ def main():
     class_master_data = master_data()
     class_train_ccs = train_ccs()
     
-    a= class_train_ccs.get_options('Los Simbolos','Maternidad')
+    a= class_train_ccs.get_options('Zona Rental','Silencio')
     
     for i in a:
         print ''
