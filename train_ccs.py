@@ -162,7 +162,7 @@ class train_ccs(object):
         valor_dir,direction,ll,l=0,'',[],[]
         
         if list_sta_partial:
-            print 'LIST', list_sta_partial
+            #~ print 'LIST', list_sta_partial
             #Se divide list_sta_partial por listas y se toma la ultima lista para 
             #buscar la direccion, esto por que a veces list_sta_partial puede venir
             #de la siguiente forma: ['Antimano', 'Carapita', 'La Yaguara', 'La Paz', 'Artigas', 
@@ -179,7 +179,7 @@ class train_ccs(object):
                 if j == list_sta_partial[-1]:
                     l.append(j)
                     ll.append(l)
-            print 'LL', ll
+            #~ print 'LL', ll
             
             #Orige: Linea 4- Destino Linea 2.
             if len(ll)>1 and (list(set(ll[-1])&set(class_mdata.direction['2'].keys())) and \
@@ -239,15 +239,15 @@ class train_ccs(object):
             list_path_end,list_sta_partial,l_transac = [],[],[]
             dict_connec=deepcopy(class_mdata.connec)
 
-            if class_mdata.line[j] in ['21','20']:
-                line=class_mdata.line[path[0]]
+            if class_mdata.line[path[0]] in ['21','20']:
+                line='2'
             else:
-                line=class_mdata.line[j]
+                line=class_mdata.line[path[0]]
             list_path_end.append({'text':'Aborde la estacion ' + path[0] + ' de la Linea ' + line,
                                   'stations':[]})
 
             for i,j in zip(path,path[1::]):
-                not list(set([i]&set[list_sta_partial])) and list_sta_partial.append(i)
+                not list(set([i])&set(list_sta_partial)) and list_sta_partial.append(i)
                 dict_connec = self.line_2(list_sta_partial,class_mdata,path,dict_connec)
                 list_trans, qty_trans = self.get_trans(list_path,class_mdata,dict_connec)
                 
@@ -255,7 +255,7 @@ class train_ccs(object):
                     l_transac.append((i,j))
                     print 'I %s J %s' % (i,j)
                     print 'list_sta_partiallll', list_sta_partial
-                    if len(list_sta_partial) > 0:
+                    if len(list_sta_partial) > 0:unhashable
                         direction= self.get_direction(list_sta_partial,class_mdata)
                         print 'DIRECTION', direction
 
@@ -286,7 +286,7 @@ class train_ccs(object):
                     
                     if not j==end or not list_sta_partial[-1] ==end:
                         list_sta_partial=[]
-                    not list(set([j]&set[list_sta_partial])) and list_sta_partial.append(j)
+                    not list(set([j])&set(list_sta_partial)) and list_sta_partial.append(j)
             
             if j not in list_sta_partial:
                 list_sta_partial.append(j)
