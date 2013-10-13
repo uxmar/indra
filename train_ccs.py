@@ -95,18 +95,27 @@ class train_ccs(object):
             #~ dict_connec['Caricuao'].get('Mamera',):
                 #~ dict_connec['Caricuao'].pop('Mamera')
 
+
+
         #Linea 4(Zona Rental) - Linea 2 / Silencio
         if list_sta_partial[0] in class_mdata.direction['4'].keys():
+            print 'list_sta_partiaaaal', list_sta_partial
             #Linea 4(Zona Rental) - Linea 2
             if path[-1] in class_mdata.direction['2'].keys() and path[-1] != 'Silencio':
                 if dict_connec.get('Teatros',) and \
                 dict_connec['Teatros'].get('Capuchinos',):
                     dict_connec['Teatros'].pop('Capuchinos')
+            #Linea 4(Zona Rental) - Linea 21
+            if path[-1] in class_mdata.direction['21'].keys() and not any('Silencio' in s for s in path):
+                if dict_connec.get('Mamera',) and dict_connec['Mamera'].get('Ruiz Pineda',):
+                    dict_connec['Mamera'].pop('Ruiz Pineda')
+                if dict_connec.get('Teatros',) and dict_connec['Teatros'].get('Capuchinos',):
+                    dict_connec['Teatros'].pop('Capuchinos')
             
         #Zoologico - Linea 2 / Silencio
         if list_sta_partial[0] in class_mdata.direction['20'].keys():
             #Zoologico - Linea 2
-            if path[len(path)-1] in class_mdata.direction['2'].keys() and path[len(path)-1] != 'Silencio':
+            if path[-1] in class_mdata.direction['2'].keys() and path[-1] != 'Silencio':
                 if dict_connec.get('Mamera',) and \
                 dict_connec['Mamera'].get('Antimano',):
                     dict_connec['Mamera'].pop('Antimano')
@@ -133,7 +142,6 @@ class train_ccs(object):
             if dict_connec.get('Mamera',) and \
             dict_connec['Mamera'].get('Antimano',):
                 dict_connec['Mamera'].pop('Antimano')
-            flag=True
 
         #Las Adjuntas - Linea 2 / Silencio
         if list_sta_partial[0] in class_mdata.direction['21'].keys():
@@ -157,7 +165,6 @@ class train_ccs(object):
                 if dict_connec.get('Capuchinos') and \
                 dict_connec['Capuchinos'].get('Teatros',):
                     dict_connec['Capuchinos'].pop('Teatros')
-                flag= True
         return dict_connec
         
     def get_direction(self,list_sta_partial,class_mdata):
@@ -250,13 +257,16 @@ class train_ccs(object):
 
             for i,j in zip(path,path[1::]):
                 not list(set([i])&set(list_sta_partial)) and list_sta_partial.append(i)
+                
                 dict_connec = self.line_2(list_sta_partial,class_mdata,path,dict_connec)
                 list_trans, qty_trans = self.get_trans(list_path,class_mdata,dict_connec)
                 
+                
+                
                 if (i,j) in list_trans:
                     l_transac.append((i,j))
-                    print 'I %s J %s' % (i,j)
-                    print 'list_sta_partiallll', list_sta_partial
+                    #~ print 'I %s J %s' % (i,j)
+                    #~ print 'list_sta_partiallll', list_sta_partial
                     if len(list_sta_partial) > 0:
                         direction= self.get_direction(list_sta_partial,class_mdata)
                         print 'DIRECTION', direction
@@ -290,6 +300,8 @@ class train_ccs(object):
                         list_sta_partial=[]
                     not list(set([j])&set(list_sta_partial)) and list_sta_partial.append(j)
             
+            print 'list_trans', list_trans
+            print 'l_transac', l_transac
             if j not in list_sta_partial:
                 list_sta_partial.append(j)
             direction = self.get_direction(list_sta_partial,class_mdata)
@@ -346,7 +358,7 @@ def main():
     class_master_data = master_data()
     class_train_ccs = train_ccs()
     
-    a= class_train_ccs.get_options('Zona Rental','Mamera')
+    a= class_train_ccs.get_options('Zona Rental','Las Adjuntas')
     
     for i in a:
         print ''
