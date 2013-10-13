@@ -289,19 +289,11 @@ class train_ccs(object):
                             direction and list_path_end.append({'text':'Ingressse al tren con direccion ' + direction,'stations':[]})
                             list_path_end.append({'text':'Continueee ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + i + ' ->','stations':list_sta_partial})
                             list_path_end.append({'text':'RRealicee Transferencia en la estacion '+ i + ' a la Linea ' + line,'stations':[]})
-                            
-                    #~ else:
-                        #~ list_path_end.pop(-1)
-                        #~ direction= self.get_direction([j],class_mdata)
-                    
                     llist_sta_partial.append(list_sta_partial)
-                    
                     if not j==end or not list_sta_partial[-1] ==end:
                         list_sta_partial=[]
                     not list(set([j])&set(list_sta_partial)) and list_sta_partial.append(j)
             
-            print 'list_trans', list_trans
-            print 'l_transac', l_transac
             if j not in list_sta_partial:
                 list_sta_partial.append(j)
             direction = self.get_direction(list_sta_partial,class_mdata)
@@ -310,7 +302,8 @@ class train_ccs(object):
             #~ Zona Rental-Plaza Vnzla, Plaza Vnzla-Ciudad Univer.
             if len(list(set(l_transac)&set(class_mdata.connec2[1])))==2:
                 sta_zon= path[path.index(i)-1]
-                list_path_end.append({'text':'Reealiicee Transferencia en la estacion '+ sta_zon + ' a la Linea ' + class_mdata.line[j],'stations':[]})
+                list_path_end.append({'text':'Reealiicee Transferencia en la estacion '+ sta_zon +
+                ' a la Linea ' + class_mdata.line[j],'stations':[]})
 
             #~ Para el caso en que luego de la transferencia no hay que rodar una estacion mas para 
             #~ poder llegar. Con el solo hecho de hacer la transferencia ya se llego al destino.
