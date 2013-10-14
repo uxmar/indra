@@ -102,10 +102,10 @@ class train_ccs(object):
                 #~ dict_connec['Caricuao'].pop('Mamera')
 
 
-
+        #~ print 'list_staaaa', list_sta_partial
         #Linea 4(Zona Rental) - Linea 2 / Silencio
-        if list_sta_partial[0] in class_mdata.direction['4'].keys():
-            #~ print 'list_sta_partiaaaal', list_sta_partial
+        if list_sta_partial[-1] in class_mdata.direction['4'].keys():
+            print 'list_sta_partiaaaal', list_sta_partial
             #Linea 4(Zona Rental) - Linea 2
             if path[-1] in class_mdata.direction['2'].keys() and path[-1] != 'Silencio':
                 print 'entre'
@@ -254,7 +254,7 @@ class train_ccs(object):
                 [dict_del.update({len(path):list_path.index(path)}) for path in list_path]
                 list_path.pop(dict_del[max(dict_del.keys())])
         
-        list_path.pop(0)
+        #~ list_path.pop(0)
         
         for path in list_path:
             qty_trans,dict_sta_trans,list_trans=0,{},[]
