@@ -254,7 +254,7 @@ class train_ccs(object):
                 [dict_del.update({len(path):list_path.index(path)}) for path in list_path]
                 list_path.pop(dict_del[max(dict_del.keys())])
         
-        #~ list_path.pop(1)
+        list_path.pop(0)
         
         for path in list_path:
             qty_trans,dict_sta_trans,list_trans=0,{},[]
