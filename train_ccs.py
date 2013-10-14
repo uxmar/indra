@@ -281,7 +281,7 @@ class train_ccs(object):
                         if start==i:
                             list_path_end.append({'text':'Realicee Transferencia de la estacion '+ i + ' a la Linea ' + line + ' hasta la estacion ' + j,'stations':[]})
                         elif dict_connec[i][j]==1:
-                            direction and list_path_end.append({'text':'Ingressse al tren con direccion ' + direction,'stations':[]})
+                            direction and list_path_end.append({'text':'IIngrese al tren con direccion ' + direction,'stations':[]})
                             list_path_end.append({'text':'Contiiinue ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + list_sta_partial[-1] + ' ->','stations':list_sta_partial})
                             list_path_end.append({'text':'Realiice Transferencia de tren en la estacion ' + list_sta_partial[len(list_sta_partial)-1],'stations':[]})
                         elif dict_connec[i][j] in [2,3]:
@@ -289,7 +289,7 @@ class train_ccs(object):
                             list_path_end.append({'text':'Continueee ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + i + ' ->','stations':list_sta_partial})
                             list_path_end.append({'text':'Realicee Transferencia en la estacion '+ i + ' a la Linea ' + line + ' hasta la estacion ' + j,'stations':[]})
                         elif dict_connec[i][j]==4:
-                            direction and list_path_end.append({'text':'Ingressse al tren con direccion ' + direction,'stations':[]})
+                            direction and list_path_end.append({'text':'Inggggrese al tren con direccion ' + direction,'stations':[]})
                             list_path_end.append({'text':'Continueee ' + str(len(list_sta_partial)) + ' estaciones en esta linea hasta la estacion ' + i + ' ->','stations':list_sta_partial})
                             list_path_end.append({'text':'RRealicee Transferencia en la estacion '+ i + ' a la Linea ' + line,'stations':[]})
                     if not j==end or not list_sta_partial[-1] ==end:
@@ -360,7 +360,7 @@ def main():
     class_master_data = master_data()
     class_train_ccs = train_ccs()
     
-    a= class_train_ccs.get_options('Zona Rental','Caricuao')
+    a= class_train_ccs.get_options('Zona Rental','Sabana Grande')
     
     for i in a:
         print ''
