@@ -102,15 +102,16 @@ class train_ccs(object):
                 #~ dict_connec['Caricuao'].pop('Mamera')
 
 
-        #~ print 'list_staaaa', list_sta_partial
+        #~ Silencio / Zoologico
+        if sta_i == 'Silencio' and path[-1] in class_mdata.direction['20'].keys():
+            if dict_connec.get('Mamera',) and dict_connec['Mamera'].get('Caricuao',):
+                dict_connec['Mamera'].pop('Caricuao')
+
         #Linea 4(Zona Rental) - Linea 2 / Silencio
         if sta_i in class_mdata.direction['4'].keys():
-            #~ print 'list_sta_partiaaaal', list_sta_partial
             #Linea 4(Zona Rental) - Linea 2
             if path[-1] in class_mdata.direction['2'].keys() and path[-1] != 'Silencio':
-                print 'entre'
-                if dict_connec.get('Teatros',) and \
-                dict_connec['Teatros'].get('Capuchinos',):
+                if dict_connec.get('Teatros',) and dict_connec['Teatros'].get('Capuchinos',):
                     dict_connec['Teatros'].pop('Capuchinos')
             #Linea 4(Zona Rental) - Linea 21 sin Silencio en el camino
             if path[-1] in class_mdata.direction['21'].keys() and not any('Silencio' in s for s in path):
@@ -386,7 +387,7 @@ def main():
     class_master_data = master_data()
     class_train_ccs = train_ccs()
     
-    a= class_train_ccs.get_options('Silencio','Bellas Artes')
+    a= class_train_ccs.get_options('Silencio','Zoologico')
     
     for i in a:
         print ''
