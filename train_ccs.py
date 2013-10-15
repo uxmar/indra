@@ -315,13 +315,12 @@ class train_ccs(object):
                                 list_path_end.append({'text':'RRealicee Transferencia en la estacion '+ j + ' a la Linea ' + class_mdata.line[path[path.index(j)+1]],'stations':[]})
                             else:
                                 list_path_end.append({'text':'RRealicee Transferencia en la estacion '+ j + ' a la Linea ' + line,'stations':[]})
+                        elif dict_connec[i][j]==6:
+                            direction and list_path_end.append({'text':'Ingrese al tren con direccion ' + direction,'stations':[]})
+                            list_path_end.append({'text':'Continueee ' + str(len(list_sta_partial)+1) + ' estaciones en esta linea hasta la estacion ' + j + ' ->','stations':list_sta_partial})
+                            list_path_end.append({'text':'Realice Transferencia de tren en la estacion '+ j,'stations':[]})
                     if not j==end or not list_sta_partial[-1] ==end:
                         list_sta_partial=[]
-                    #~ if not any(j in s for s in list_sta_partial):
-                        #~ print 'J', j
-                        #~ list_sta_partial.append(j)
-                        #~ print 'JJJJLIST', list_sta_partial
-                        
             
             if not any(j in s for s in list_sta_partial):
                 list_sta_partial.append(j)
@@ -344,7 +343,7 @@ class train_ccs(object):
                 direction,'stations':[]})
                 sta1=list_sta_partial[0]
                 sta2=list_sta_partial[1]
-                if (dict_connec.get(sta1,) and dict_connec[sta1].get(sta2,))==4 and 
+                if (dict_connec.get(sta1,) and dict_connec[sta1].get(sta2,))==4 and \
                 (class_mdata.connec3[1] in ','.join(path)):
                     list_sta_partial.pop(0) #Para el caso en que la transferencia es la 4 me sobra
                     #la estacion Plaza Venezuela, me da una estacion de mas.
@@ -387,7 +386,7 @@ def main():
     class_master_data = master_data()
     class_train_ccs = train_ccs()
     
-    a= class_train_ccs.get_options('Las Adjuntas','Zoologico')
+    a= class_train_ccs.get_options('Zona Rental','Sabana Grande')
     
     for i in a:
         print ''
