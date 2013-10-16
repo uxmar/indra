@@ -44,6 +44,11 @@ class train_ccs(object):
 
     def line_2(self,sta_i,cl_mdata,path,d_connec):
         
+        #~ Linea 2 / Linea 4
+        if sta_i in cl_mdata.direction['2'].keys() and path[-1] in cl_mdata.direction['4'].keys():
+            if d_connec.get('Capuchinos') and d_connec['Capuchinos'].get('Teatros',):
+                d_connec['Capuchinos'].pop('Teatros')
+                
         #~ Silencio / Zoologico
         if sta_i == 'Silencio' and path[-1] in cl_mdata.direction['20'].keys():
             if d_connec.get('Mamera',) and d_connec['Mamera'].get('Caricuao',):
@@ -143,7 +148,7 @@ class train_ccs(object):
                 l.append(j)
                 ll.append(l)
         #~ print 'LL', ll
-        
+            
         if len(ll)>1 and (list(set(ll[-1])&set(cl_mdata.direction['2'].keys())) and \
         #Origen: Linea 4- Destino Linea 2.
              list(set(ll[-2])&set(cl_mdata.direction['4'].keys()))):
@@ -277,13 +282,16 @@ class train_ccs(object):
                         l_path_end.append({'text':'Realice Transferencia de tren en la estacion '+
                          j,'stations':[]})
 
-                if not j==end or not l_sta_part[-1] ==end:
+                if j==end or l_sta_part[-1] ==end:
                     l_sta_part=[]
             
+            #~ print 'I %s J %s' % (i,j)
+
+            [l_sta_part.append(i) for i,j in zip(path,path[1::]) if qty_trans==0]   
+                
             if not any(j in s for s in l_sta_part):
                 l_sta_part.append(j)
             
-            #~ print 'I %s J %s' % (i,j)
 
             if  (d_connec.get(i,) and d_connec[i].get(j,)) and d_connec[i][j] == 3 or \
             ((l_trans and l_trans[-1][1]==end) and \
@@ -303,8 +311,9 @@ class train_ccs(object):
                         #Para el caso en que la transferencia es la 4 me sobra
                         #la estacion Plaza Venezuela, me da una estacion de mas.
                 if len(l_sta_part)>=1:
-                    print 'direction', direction
+                    
                     direction = self.get_direction(l_sta_part,cl_mdata)
+                    print 'direction', direction
                     direction and l_path_end.append({'text':'Innnngrese al tren con direccion ' +
                     direction,'stations':[]})
                     l_path_end.append({'text':'CContinue ' + str(len(l_sta_part)) + 
@@ -341,7 +350,8 @@ def main():
     class_master_data = master_data()
     class_train_ccs = train_ccs()
     
-    a= class_train_ccs.get_options('Silencio','El Valle')
+    #~ a= class_train_ccs.get_options('Carapita','Nuevo Circo')
+    a= class_train_ccs.get_options('Carapita','Teatros')
     
     for i in a:
         print ''
