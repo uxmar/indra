@@ -109,8 +109,14 @@ class OptionsView(ModalView):
         self.clear_widgets()
         color = ColorLayout()
         boxl = BoxLayout(orientation= 'vertical',anchor_y= "top")
-        grid = GridLayout(cols=1,size_hint_x=None, width=Window.width,pos_hint= {'center_x':.5, 'center_y':.5})
-        
+        grid = GridLayout(cols=1, size_hint_y=None)
+        grid.bind(minimum_height=grid.setter('height')) 
+        scroll = ScrollView(size_hint=(None, None))
+        scroll.size = (Window.width, Window.height)
+        scroll.center = Window.center
+        l_space = MultiLineLabel(text='',font_size="16dp", background_color=(255,255,255,255), markup=True)
+        grid.add_widget(l_space)
+
         for j in args[0]:
             text_st = '[color=333333]' + j + '[/color]'
             l = MultiLineLabel(text=text_st,font_size="16dp", background_color=(255,255,255,255), markup=True)
@@ -121,7 +127,8 @@ class OptionsView(ModalView):
         button_back.width="100dp"
         button_back.bind(on_press = lambda widget: self.show_view_list_path(args[1]))
         
-        boxl.add_widget(grid)
+        scroll.add_widget(grid)
+        boxl.add_widget(scroll)
         boxl.add_widget(button_back)
         color.add_widget(boxl)
         self.add_widget(color)
@@ -235,7 +242,6 @@ class MainWindow(Screen):
 
 class TrainccsApp(App):
 
-
     def __init__(self):
         super(TrainccsApp, self).__init__()
 
@@ -256,11 +262,5 @@ class TrainccsApp(App):
         # Irrelevant code
             pass
 
-
 TrainccsApp().run()
-
-
-
-
-
 

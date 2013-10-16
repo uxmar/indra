@@ -202,7 +202,7 @@ class train_ccs(object):
                 [d_del.update({len(path):l_path.index(path)}) for path in l_path]
                 l_path.pop(d_del[max(d_del.keys())])
         
-        #~ l_path.pop(0)
+        #~ l_path.pop(1)
         
         for path in l_path:
             qty_trans,d_sta_trans,l_trans=0,{},[]
@@ -225,7 +225,7 @@ class train_ccs(object):
                 if (i,j) in l_trans and len(l_sta_part) > 0:
                     
                     direction= self.get_direction(l_sta_part,cl_mdata)
-                    print 'DIRECTION', direction
+                    #~ print 'DIRECTION', direction
 
                     if cl_mdata.line[j] in ['21','20']:
                         line='2'
@@ -292,11 +292,10 @@ class train_ccs(object):
                         l_path_end.append({'text':'Realice Transferencia de tren en la estacion '+
                          j,'stations':[]})
                     l_sta_part=[]
-                if j==end or (l_sta_part and l_sta_part[-1] ==end):
-                    l_sta_part=[]
+                #~ if j==end or (l_sta_part and l_sta_part[-1] ==end):
+                    #~ l_sta_part=[]
             
             #~ print 'I %s J %s' % (i,j)
-
             [l_sta_part.append(i) for i,j in zip(path,path[1::]) if qty_trans==0]   
                 
             if not any(j in s for s in l_sta_part):
@@ -323,7 +322,7 @@ class train_ccs(object):
                 if len(l_sta_part)>=1:
                     
                     direction = self.get_direction(l_sta_part,cl_mdata)
-                    print 'direction', direction
+                    #~ print 'direction', direction
                     direction and l_path_end.append({'text':'Innnngrese al tren con direccion ' +
                     direction,'stations':[]})
                     l_path_end.append({'text':'CContinue ' + str(len(l_sta_part)) + 
@@ -360,7 +359,7 @@ def main():
     class_master_data = master_data()
     class_train_ccs = train_ccs()
     
-    a= class_train_ccs.get_options('Zona Rental','Caricuao')
+    a= class_train_ccs.get_options('La Rinconada','Agua Salud')
     
     for i in a:
         print ''
