@@ -114,6 +114,9 @@ class OptionsView(ModalView):
         scroll = ScrollView(size_hint=(None, None))
         scroll.size = (Window.width, Window.height)
         scroll.center = Window.center
+        #2 Space added but button go back ocuppies space and first value hidden.
+        l_space = MultiLineLabel(text='',font_size="16dp", background_color=(255,255,255,255), markup=True)
+        grid.add_widget(l_space)
         l_space = MultiLineLabel(text='',font_size="16dp", background_color=(255,255,255,255), markup=True)
         grid.add_widget(l_space)
 
@@ -138,7 +141,16 @@ class OptionsView(ModalView):
         self.clear_widgets()
         color = ColorLayout()
         boxl = BoxLayout(orientation= 'vertical',anchor_y= "top")
-        grid = GridLayout(cols=1,size_hint_x=None, width=Window.width,pos_hint= {'center_x':.5, 'center_y':.5})
+        grid = GridLayout(cols=1, size_hint_y=None)
+        grid.bind(minimum_height=grid.setter('height')) 
+        scroll = ScrollView(size_hint=(None, None))
+        scroll.size = (Window.width, Window.height)
+        scroll.center = Window.center
+        #2 Space added but button go back ocuppies space and first value hidden.
+        l_space = MultiLineLabel(text='',font_size="16dp", background_color=(255,255,255,255), markup=True)
+        grid.add_widget(l_space)
+        l_space = MultiLineLabel(text='',font_size="16dp", background_color=(255,255,255,255), markup=True)
+        grid.add_widget(l_space)
         
         for i in args[0]:
             text = '[color=333333]' + i['text'] + '[/color]'
@@ -150,8 +162,9 @@ class OptionsView(ModalView):
         button_back.height="50dp"
         button_back.width="100dp"
         button_back.bind(on_press = lambda widget: self.show_option_view())
-        
-        boxl.add_widget(grid)
+
+        scroll.add_widget(grid)
+        boxl.add_widget(scroll)
         boxl.add_widget(button_back)
         color.add_widget(boxl)
         self.add_widget(color)
