@@ -190,6 +190,7 @@ class train_ccs(object):
         
         cl_mdata,l_sta_trans,l_sta_part = master_data(),[],[]
         l_path = self.find_all_paths(cl_mdata.graph,start,end)
+        l_path = sorted(l_path,key=len) #Se ordena l_path por longitud
         print start, end
         print 'PATHS', l_path
         print ''
@@ -359,7 +360,7 @@ def main():
     class_master_data = master_data()
     class_train_ccs = train_ccs()
     
-    a= class_train_ccs.get_options('Carapita','Teatros')
+    a= class_train_ccs.get_options('Zona Rental','Caricuao')
     
     for i in a:
         print ''
