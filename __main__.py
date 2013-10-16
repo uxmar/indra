@@ -36,6 +36,10 @@ from functools import partial
 from kivy.core.window import Window
 from kivy.uix.dropdown import DropDown
 
+#~ from kivy.uix.screenmanager.SlideTransition import SlideTransition 
+#:import SwapTransition kivy.uix.screenmanager.SwapTransition
+#:import WipeTransition kivy.uix.screenmanager.WipeTransition
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
 
 class ComboEdit(TextInput):
     '''
@@ -269,6 +273,7 @@ class TrainccsApp(App):
 
     def hook_keyboard(self, window, key, *largs):
         if key == 27: # BACK
+            return True
         # Irrelevant code
             pass
         elif key in (282, 319): # SETTINGS

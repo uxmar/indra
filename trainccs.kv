@@ -1,3 +1,8 @@
+#:import SlideTransition kivy.uix.screenmanager.SlideTransition
+#:import SwapTransition kivy.uix.screenmanager.SwapTransition
+#:import WipeTransition kivy.uix.screenmanager.WipeTransition
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+
 MainWindow:
 
 <ColorLayout>:
@@ -24,7 +29,8 @@ MainWindow:
         height: "85dp"
         width: "85dp"
         pos_hint: {'center':(.34, .7)}
-        on_press: root.manager.current = 'inputstation'
+        on_release: root.manager.transition = SlideTransition(direction="up")
+
         
     Button:
         text: 'B2'
