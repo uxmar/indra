@@ -36,6 +36,9 @@ class train_ccs(object):
                 elif (i,j)==('Plaza Venezuela','Zona Rental') and \
                 (path[path.index(i)-1],'Plaza Venezuela') in list_tu_trans:
                     pass
+                elif (i,j)==('Capuchinos','Teatros') and \
+                path[0] in cl_mdata.direction['2'].keys():
+                    pass
                 else:
                     list_tu_trans.append((i,j))
                     qty_trans = qty_trans + 1
@@ -44,12 +47,8 @@ class train_ccs(object):
 
     def line_2(self,sta_i,cl_mdata,path,d_connec):
         
-        #~ Linea 2 -> Linea 4 / Linea 20 / Linea 21
+        #~ Linea 2 -> Linea 20 / Linea 21
         if sta_i in cl_mdata.direction['2'].keys():
-            #~ Linea 2 / Linea 4
-            if path[-1] in cl_mdata.direction['4'].keys():
-                if d_connec.get('Capuchinos') and d_connec['Capuchinos'].get('Teatros',):
-                    d_connec['Capuchinos'].pop('Teatros')
             #~ Linea 2 / Linea 20
             if path[-1] in cl_mdata.direction['20'].keys():
                 if d_connec.get('Mamera') and d_connec['Mamera'].get('Caricuao',):
@@ -360,20 +359,12 @@ def main():
     class_master_data = master_data()
     class_train_ccs = train_ccs()
     
-    #~ a= class_train_ccs.get_options('Carapita','Nuevo Circo')
-    a= class_train_ccs.get_options('La Paz','Las Adjuntas')
+    a= class_train_ccs.get_options('Carapita','Teatros')
     
     for i in a:
         print ''
         for j in i['path']:
             print j['text']
             
-    #~ print class_train_ccs.get_options('Altamira','Las Adjuntas')
-    #~ print class_train_ccs.transfer_qty()
-    
-    #~ class_train_ccs.get_l_path_decription()
-
-    #~ class_train_ccs.recursive_dfs(class_master_data.graph,'')
-
 if __name__ == '__main__':
     main()
