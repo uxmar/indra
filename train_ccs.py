@@ -219,37 +219,64 @@ class train_ccs(object):
                     
                     if start==i:
                         if  cl_mdata.connec3[1] in ','.join(path):
-                            l_path_end.append({'text':'Realice Transferencia de la estacion '+ i + ' a la Linea ' + 
-                            cl_mdata.line[path[path.index(j)+1]],'stations':[]})
+                            l_path_end.append({'text':'Realice Transferencia de la estacion '+ i + 
+                            ' a la Linea ' + cl_mdata.line[path[path.index(j)+1]],'stations':[]})
                         else:
-                            l_path_end.append({'text':'Realicee Transferencia de la estacion '+ i + ' a la Linea ' + line + ' hasta la estacion ' + j,'stations':[]})
+                            l_path_end.append({'text':'Realice Transferencia de la estacion '+ i + 
+                            ' a la Linea ' + line + ' hasta la estacion ' + j,'stations':[]})
                     elif d_connec[i][j]==1:
-                        direction and l_path_end.append({'text':'IIngrese al tren con direccion ' + direction,'stations':[]})
-                        l_path_end.append({'text':'Contiiinue ' + str(len(l_sta_part)) + ' estaciones en esta linea hasta la estacion ' + l_sta_part[-1] + ' ->','stations':l_sta_part})
-                        l_path_end.append({'text':'Realiice Transferencia de tren en la estacion ' + l_sta_part[len(l_sta_part)-1],'stations':[]})
+                        direction and l_path_end.append({'text':'IIngrese al tren con direccion ' + 
+                        direction,'stations':[]})
+                        l_path_end.append({'text':'Contiiinue ' + str(len(l_sta_part)) + 
+                        ' estaciones en esta linea hasta la estacion ' + l_sta_part[-1] + 
+                        ' ->','stations':l_sta_part})
+                        l_path_end.append({'text':'Realice Transferencia de tren en la estacion ' + 
+                        l_sta_part[len(l_sta_part)-1],'stations':[]})
                     elif d_connec[i][j]==2 and cl_mdata.connec3[1] in ','.join(path):
-                        direction and l_path_end.append({'text':'Ingre al tren con direccion ' + direction,'stations':[]})
-                        l_path_end.append({'text':'Continueee ' + str(len(l_sta_part)) + ' estaciones en esta linea hasta la estacion ' + i + ' ->','stations':l_sta_part})
-                        l_path_end.append({'text':'RRealicee Transferencia en la estacion '+ i + ' a la Linea ' + cl_mdata.line[path[path.index(j)+1]],'stations':[]})
+                        direction and l_path_end.append({'text':'Ingre al tren con direccion ' + 
+                        direction,'stations':[]})
+                        l_path_end.append({'text':'Continueee ' + str(len(l_sta_part)) + 
+                        ' estaciones en esta linea hasta la estacion ' + i + 
+                        ' ->','stations':l_sta_part})
+                        l_path_end.append({'text':'RRealicee Transferencia en la estacion '+ i + 
+                        ' a la Linea ' + cl_mdata.line[path[path.index(j)+1]],'stations':[]})
                     elif d_connec[i][j] in [2,3]:
-                        direction and l_path_end.append({'text':'Ingressse al tren con direccion ' + direction,'stations':[]})
-                        l_path_end.append({'text':'Continueee ' + str(len(l_sta_part)) + ' estaciones en esta linea hasta la estacion ' + i + ' ->','stations':l_sta_part})
-                        l_path_end.append({'text':'Realicee Transferencia en la estacion '+ i + ' a la Linea ' + line + ' hasta la estacion ' + j,'stations':[]})
+                        direction and l_path_end.append({'text':'Ingressse al tren con direccion '
+                         + direction,'stations':[]})
+                        l_path_end.append({'text':'Continueee ' + str(len(l_sta_part)) + 
+                        ' estaciones en esta linea hasta la estacion ' + i +
+                        ' ->','stations':l_sta_part})
+                        l_path_end.append({'text':'Realicee Transferencia en la estacion '+ i + 
+                        ' a la Linea ' + line + ' hasta la estacion ' + j,'stations':[]})
                     elif d_connec[i][j]==4:
-                        direction and l_path_end.append({'text':'Inggggrese al tren con direccion ' + direction,'stations':[]})
-                        l_path_end.append({'text':'Continueee ' + str(len(l_sta_part)) + ' estaciones en esta linea hasta la estacion ' + i + ' ->','stations':l_sta_part})
-                        l_path_end.append({'text':'RRealicee Transferencia en la estacion '+ i + ' a la Linea ' + line,'stations':[]})
+                        direction and l_path_end.append({'text':'Ingrese al tren con direccion ' + 
+                        direction,'stations':[]})
+                        l_path_end.append({'text':'Continueee ' + str(len(l_sta_part)) + 
+                        ' estaciones en esta linea hasta la estacion ' + i +
+                        ' ->','stations':l_sta_part})
+                        l_path_end.append({'text':'RRealicee Transferencia en la estacion '+ i +
+                         ' a la Linea ' + line,'stations':[]})
                     elif d_connec[i][j]==5:
-                        direction and l_path_end.append({'text':'Inggggrese al tren con direccion ' + direction,'stations':[]})
-                        l_path_end.append({'text':'Continueee ' + str(len(l_sta_part)+1) + ' estaciones en esta linea hasta la estacion ' + j + ' ->','stations':l_sta_part})
+                        direction and l_path_end.append({'text':'Ingrese al tren con direccion ' + 
+                        direction,'stations':[]})
+                        l_path_end.append({'text':'Continueee ' + str(len(l_sta_part)+1) + 
+                        ' estaciones en esta linea hasta la estacion ' + j +
+                         ' ->','stations':l_sta_part})
                         if cl_mdata.connec3[2] in ','.join(path):
-                            l_path_end.append({'text':'RRealicee Transferencia en la estacion '+ j + ' a la Linea ' + cl_mdata.line[path[path.index(j)+1]],'stations':[]})
+                            l_path_end.append({'text':'Realicee Transferencia en la estacion '+ j + 
+                            ' a la Linea ' + cl_mdata.line[path[path.index(j)+1]],'stations':[]})
                         else:
-                            l_path_end.append({'text':'RRealicee Transferencia en la estacion '+ j + ' a la Linea ' + line,'stations':[]})
+                            l_path_end.append({'text':'Realicee Transferencia en la estacion '+ j + 
+                            ' a la Linea ' + line,'stations':[]})
                     elif d_connec[i][j]==6:
-                        direction and l_path_end.append({'text':'Ingrese al tren con direccion ' + direction,'stations':[]})
-                        l_path_end.append({'text':'Continueee ' + str(len(l_sta_part)+1) + ' estaciones en esta linea hasta la estacion ' + j + ' ->','stations':l_sta_part})
-                        l_path_end.append({'text':'Realice Transferencia de tren en la estacion '+ j,'stations':[]})
+                        direction and l_path_end.append({'text':'Ingrese al tren con direccion ' + 
+                        direction,'stations':[]})
+                        l_path_end.append({'text':'Continueee ' + str(len(l_sta_part)+1) + 
+                        ' estaciones en esta linea hasta la estacion ' + j + 
+                        ' ->','stations':l_sta_part})
+                        l_path_end.append({'text':'Realice Transferencia de tren en la estacion '+
+                         j,'stations':[]})
+
                 if not j==end or not l_sta_part[-1] ==end:
                     l_sta_part=[]
             
