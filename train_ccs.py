@@ -260,7 +260,7 @@ class train_ccs(object):
         
         for path in list_path:
             qty_trans,dict_sta_trans,list_trans=0,{},[]
-            list_path_end,list_sta_partial,l_transac = [],[],[]
+            list_path_end,list_sta_partial = [],[]
             dict_connec=deepcopy(class_mdata.connec)
 
             if class_mdata.line[path[0]] in ['21','20']:
@@ -277,9 +277,7 @@ class train_ccs(object):
                 list_trans, qty_trans = self.get_trans(path,class_mdata,dict_connec)
                 
                 if (i,j) in list_trans:
-                    l_transac.append((i,j))
                     #~ print 'I %s J %s' % (i,j)
-                    #~ print 'list_sta_partiallll', list_sta_partial
                     if len(list_sta_partial) > 0:
                         direction= self.get_direction(list_sta_partial,class_mdata)
                         print 'DIRECTION', direction
@@ -328,21 +326,18 @@ class train_ccs(object):
                 list_sta_partial.append(j)
             direction = self.get_direction(list_sta_partial,class_mdata)
 
-            #~ Para el caso en que luego de la transferencia no hay que rodar una estacion mas para 
-            #~ poder llegar. Con el solo hecho de hacer la transferencia ya se llego al destino.
-            #~ Ejemplo: La Hoyada - Zona Rental.
             print 'direction', direction
             #~ print ''
             #~ print 'DICT_CONNECT', dict_connec
             #~ print 'I %s J %s' % (i,j)
 
             if  (dict_connec.get(i,) and dict_connec[i].get(j,)) and dict_connec[i][j] == 3 or \
-            ((l_transac and l_transac[-1][1]==end) and \
+            ((list_trans and list_trans[-1][1]==end) and \
              dict_connec[i][j]!=4 and dict_connec[i][j]!=1):
-                 #Si es igual a 3 debe entrar por aqui porque hay que hacer transferencia mas
-                 #no continuar una estacion mas.
-                 #Si es de tipo 1 o 4 no debe entrar aqui porque necesito que continue las
-                 #estaciones que hace falta. TEST 44.
+                #3: Para el caso en que luego de la transferencia no hay que rodar una estacion mas 
+                #para Llegar.Con solo hacer la transferencia ya se llego al destino.
+                #Si es de tipo 1 o 4 no debe entrar aqui porque necesito que continue las
+                #estaciones que hace falta. TEST 44.
                 pass
             else:
                 direction and list_path_end.append({'text':'Innnngrese al tren con direccion ' +
@@ -364,10 +359,6 @@ class train_ccs(object):
             dict_sta_trans.update({'stations':len(path)})
             dict_sta_trans.update({'transfers':qty_trans})
             dict_sta_trans.update({'path':list_path_end})
-            
-            #~ dict_transitory.update({len(path):dict_sta_trans})
-        #~ for key, value in sorted(dict_transitory.iteritems(), key=lambda (k,v): (v,k)):
-            #~ list_sta_trans.append(value)
             list_sta_trans.append(dict_sta_trans)
         return list_sta_trans
 
