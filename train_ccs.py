@@ -250,6 +250,7 @@ class train_ccs(object):
         print ''
 
         if start in class_mdata.direction['21'].keys():
+            print 'entrando'
             dict_del = {}
             if end =='Silencio' or end in class_mdata.direction['4'].keys():
                 [dict_del.update({len(path):list_path.index(path)}) for path in list_path]
@@ -334,34 +335,40 @@ class train_ccs(object):
             #~ print ''
             #~ print 'DICT_CONNECT', dict_connec
             #~ print 'I %s J %s' % (i,j)
-            
-            if  ((dict_connec.get(i,) and dict_connec[i].get(j,)) == 3) or \
-            ((l_transac and l_transac[-1][1]==end) and not \
-            ((dict_connec.get(i,) and dict_connec[i].get(j,)) == 4)):
+
+            if  (dict_connec.get(i,) and dict_connec[i].get(j,)) and dict_connec[i][j] == 3 or \
+            ((l_transac and l_transac[-1][1]==end) and \
+             dict_connec[i][j]!=4 and dict_connec[i][j]!=1):
+                 #Si es igual a 3 debe entrar por aqui porque hay que hacer transferencia mas
+                 #no continuar una estacion mas.
+                 #Si es de tipo 1 o 4 no debe entrar aqui porque necesito que continue las
+                 #estaciones que hace falta. TEST 44.
                 pass
             else:
                 direction and list_path_end.append({'text':'Innnngrese al tren con direccion ' +
                 direction,'stations':[]})
-                sta1=list_sta_partial[0]
-                sta2=list_sta_partial[1]
-                if (dict_connec.get(sta1,) and dict_connec[sta1].get(sta2,))==4 and \
-                (class_mdata.connec3[1] in ','.join(path)):
-                    list_sta_partial.pop(0) #Para el caso en que la transferencia es la 4 me sobra
-                    #la estacion Plaza Venezuela, me da una estacion de mas.
+                if len(list_sta_partial)>1:
+                    sta1=list_sta_partial[0]
+                    sta2=list_sta_partial[1]
+                    if (dict_connec.get(sta1,) and dict_connec[sta1].get(sta2,))==4 and \
+                    (class_mdata.connec3[1] in ','.join(path)):
+                        list_sta_partial.pop(0) 
+                        #Para el caso en que la transferencia es la 4 me sobra
+                        #la estacion Plaza Venezuela, me da una estacion de mas.
                 if len(list_sta_partial)>=1:
                     list_path_end.append({'text':'CContinue ' + str(len(list_sta_partial)) + 
                     ' estaciones en esta linea hasta la estacion ' + j + ' ->', \
                     'stations':list_sta_partial})
-
+            
             list_path_end.append({'text':'Usted ha llegado a su destino','stations':[]})
             dict_sta_trans.update({'stations':len(path)})
             dict_sta_trans.update({'transfers':qty_trans})
             dict_sta_trans.update({'path':list_path_end})
-            dict_transitory.update({len(path):dict_sta_trans})
-
-        for key, value in sorted(dict_transitory.iteritems(), key=lambda (k,v): (v,k)):
-            list_sta_trans.append(value)
-
+            
+            #~ dict_transitory.update({len(path):dict_sta_trans})
+        #~ for key, value in sorted(dict_transitory.iteritems(), key=lambda (k,v): (v,k)):
+            #~ list_sta_trans.append(value)
+            list_sta_trans.append(dict_sta_trans)
         return list_sta_trans
 
     def min_path(self, graph, start, end):
@@ -387,7 +394,7 @@ def main():
     class_master_data = master_data()
     class_train_ccs = train_ccs()
     
-    a= class_train_ccs.get_options('Silencio','Zoologico')
+    a= class_train_ccs.get_options('Silencio','El Valle')
     
     for i in a:
         print ''
