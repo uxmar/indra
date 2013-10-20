@@ -19,7 +19,7 @@ from kivy.uix.popup import Popup
 from kivy.properties import StringProperty, ListProperty, ObjectProperty
 from kivy.clock import Clock
 from kivy.uix.label import Label
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.screenmanager import ScreenManager, Screen, WipeTransition
 from kivy.lang import Builder
 from kivy.uix.modalview import ModalView
 import random
@@ -35,11 +35,6 @@ from kivy.graphics import Line
 from functools import partial
 from kivy.core.window import Window
 from kivy.uix.dropdown import DropDown
-
-#~ from kivy.uix.screenmanager.SlideTransition import SlideTransition 
-#:import SwapTransition kivy.uix.screenmanager.SwapTransition
-#:import WipeTransition kivy.uix.screenmanager.WipeTransition
-#:import FadeTransition kivy.uix.screenmanager.FadeTransition
 
 class ComboEdit(TextInput):
     '''
@@ -263,7 +258,7 @@ class TrainccsApp(App):
         super(TrainccsApp, self).__init__()
 
     def build(self):
-        sm = ScreenManager()
+        sm = ScreenManager(transition=WipeTransition())
         sm.add_widget(MainWindow(name='mainwindow'))
         sm.add_widget(StandardWidgets(name='inputstation'))
         
