@@ -107,7 +107,9 @@ class OptionsView(ModalView):
     def show_list_stations(self, *args, **kwargs):
         self.clear_widgets()
         color = ColorLayout()
-        boxl = BoxLayout(orientation= 'vertical',anchor_y= "top")
+        
+        
+        boxl = BoxLayout(orientation= 'vertical',anchor_y= "top",padding=10)
         grid = GridLayout(cols=1, size_hint_y=None)
         grid.bind(minimum_height=grid.setter('height')) 
         scroll = ScrollView(size_hint=(None, None))
@@ -120,7 +122,7 @@ class OptionsView(ModalView):
         grid.add_widget(l_space)
 
         for j in args[0]:
-            text_st = '[color=333333]' + j + '[/color]'
+            text_st = '[color=333333]'+'  '+ j + '[/color]'+' '
             l = MultiLineLabel(text=text_st,font_size="16dp", background_color=(255,255,255,255), markup=True)
             grid.add_widget(l)
             
@@ -152,7 +154,8 @@ class OptionsView(ModalView):
         grid.add_widget(l_space)
         
         for i in args[0]:
-            text = '[color=333333]' + i['text'] + '[/color]'
+            text = '[color=333333]'+'  '+i['text'] + '[/color]'+'  '
+            #~ l = MultiLineLabel(text=text,font_size="16dp",markup=True)
             l = MultiLineLabel(text=text,font_size="16dp", background_color=(255,255,255,255), markup=True)
             i['stations'] and l.bind(on_press = partial(self.show_list_stations, i['stations'],args[0]))
             grid.add_widget(l)
