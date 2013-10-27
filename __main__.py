@@ -35,6 +35,28 @@ from kivy.graphics import Line
 from functools import partial
 from kivy.core.window import Window
 from kivy.uix.dropdown import DropDown
+from kivy.uix.spinner import Spinner
+from kivy.base import runTouchApp
+
+class Trainccs(FloatLayout):
+
+    def __init__(self):
+        super(Trainccs, self).__init__(auto_dismiss=False)
+        self.on_open = self.show_selected_value
+
+    def show_selected_value(self, instance):
+        btnclose = Button(text='Close', size_hint_y=None, height='50sp')
+        content = BoxLayout(orientation='vertical')
+        content.add_widget(Label(text='Hello world'))
+        content.add_widget(btnclose)
+        popup = Popup(content=content, title='Acerca de',
+                      size_hint=(None, None), size=('300dp', '300dp'))
+        btnclose.bind(on_release=popup.dismiss)
+        button = Button(text='Open popup', size_hint=(None, None),
+                        size=('150sp', '70dp'),
+                        on_release=popup.open)
+        popup.open()
+    pass
 
 class ComboEdit(TextInput):
     '''
@@ -266,8 +288,27 @@ class TrainccsApp(App):
         sm.add_widget(StandardWidgets(name='inputstation'))
         
         Window.bind(on_keyboard=self.hook_keyboard)
+        
+        self.content = content = BoxLayout()
+    
+        sc = Trainccs()
+        
+        #~ spinner = Spinner(
+            #~ text='About',
+            #~ values=('About',),
+            #~ size_hint=(None, None),
+            #~ size=(100, 44),
+            #~ 
+            #~ )
+            #~ pos_hint={'center_x': 0.5, 'center_y': 0.5})
+            
+        #~ sc.add_widget(spinner)
+        
+        sc.content.add_widget(sm)
 
-        return sm
+        return sc
+
+
 
     def hook_keyboard(self, window, key, *largs):
         if key == 27: # BACK
